@@ -1,0 +1,63 @@
+{
+  "name": "scanlation-harmonia",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "version": "0.0.1",
+  "scripts": {
+    "build-frontend": "rollup -c",
+    "build-backend": "tsc",
+    "build": "npm run build-backend && npm run build-frontend",
+    "dev": "rollup -c -w",
+    "start-frontend": "sirv public",
+    "start-backend": "ts-node src/backend/index.ts",
+    "format": "prettier --write \"src/backend/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json -c tslint.json --fix",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A helpers && git add -A index.ts",
+    "postversion": "git push && git push --tags",
+    "start": "npm-run-all --parallel start-backend dev"
+  },
+  "author": "Linkcube",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.0",
+    "@rollup/plugin-node-resolve": "^6.0.0",
+    "@types/express": "^4.17.3",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^13.7.7",
+    "@types/rimraf": "^3.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.19.1",
+    "rollup": "^1.20.0",
+    "rollup-plugin-livereload": "^1.0.0",
+    "rollup-plugin-svelte": "^5.0.3",
+    "rollup-plugin-terser": "^5.1.2",
+    "svelte": "^3.0.0",
+    "svelte-preview-card": "^1.0.1",
+    "ts-node": "^8.6.2",
+    "tslint": "^6.1.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "fetch-graphql": "^0.1.1",
+    "graphql": "^14.6.0",
+    "lodash": "^4.17.15",
+    "open": "^7.0.3",
+    "rimraf": "^3.0.2",
+    "sirv-cli": "^0.4.4"
+  },
+  "files": [
+    "lib/**/*",
+    "public/**/*"
+  ],
+  "bin": {
+    "front-end": "public/serve.js",
+    "back-end": "lib/cli_start.js"
+  }
+}
