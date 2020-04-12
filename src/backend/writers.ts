@@ -1,9 +1,17 @@
 import { join, resolve } from "path";
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  readdirSync,
+  Dirent,
+  unlinkSync
+} from "fs";
 import { sync as rimrafSync } from "rimraf";
-import { IDialogueBubble, IStyle } from "./types";
+import { IDialogueBubble, IStyle, IDialogueData } from "./types";
 
-const exportFolder = join(resolve('.'), "Series");
+const exportFolder = join(resolve("."), "Series");
 
 export const addDialogue = (data: {
   series: string;
@@ -13,7 +21,7 @@ export const addDialogue = (data: {
 }) => {
   const pagePath = join(data.series, data.volume, data.chapter, data.page);
   const dialoguePath = join(exportFolder, pagePath, "dialogue.json");
-  let dialogue = [];
+  let dialogue: IDialogueData[] = [];
   if (existsSync(dialoguePath)) {
     dialogue = JSON.parse(readFileSync(dialoguePath, "utf-8"));
   }
@@ -21,7 +29,13 @@ export const addDialogue = (data: {
     title: `Dialogue ${dialogue.length + 1}`,
     style: 0,
     raw: "",
-    translated: ""
+    translated: "",
+    bubble: {
+      x: 0,
+      y: 0,
+      height: 40,
+      width: 40
+    }
   });
   writeFileSync(dialoguePath, JSON.stringify(dialogue));
   return "Done";
@@ -242,4 +256,21 @@ export const deleteStyle = (data: { series: string; index: number }) => {
     writeFileSync(stylePath, JSON.stringify(styles));
   }
   return "Done";
+};
+
+export const cleanPreviousImage = (pagePath: string, scope: string) => {
+  const pageFiles: string[] = readdirSync(pagePath, { withFileTypes: true })
+    .filter((file: Dirent) => file.isFile())
+    .map((file: Dirent) => file.name);
+  pageFiles.forEach(file => {
+    if (file.includes("redraw.") && scope === "redraw") {
+      unlinkSync(join(pagePath, file));
+    } else if (file.includes("clean.") && scope === "clean") {
+      unlinkSync(join(pagePath, file));
+    } else if (file.includes("raw.") && scope === "raw") {
+      unlinkSync(join(pagePath, file));
+    } else if (file.includes("full.") && scope === "full") {
+      unlinkSync(join(pagePath, file));
+    }
+  });
 };

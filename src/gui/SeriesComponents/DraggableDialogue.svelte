@@ -5,11 +5,12 @@
 <script>
     import { onMount } from 'svelte';
     import { createEventDispatcher } from 'svelte'
-    import { dialogueBubble } from '../store.js';
+    import { dialogueBubble, currentDialogue, pageData } from '../store.js';
 
     export let container;
     export let initialValues = false;
     export let tooltip = "";
+    export let index;
 
     const dispatch = createEventDispatcher();
 
@@ -137,6 +138,28 @@
         }
         
     }
+
+    currentDialogue.subscribe((value) => {
+        if (value === index) {
+            clickedDialogue = true;
+        } else {
+            draggedDialogue = scaleTarget = clickedDialogue = false
+        }
+    });
+
+    pageData.subscribe((promise) => {
+        Promise.resolve(promise).then(response => {
+            if (response.hasOwnProperty('data')) {
+                let dialogueList = response.data.page.dialogue;
+                if (index < dialogueList.length) {
+                    relativeX = dialogueList[index].bubble.x;
+                    relativeY = dialogueList[index].bubble.y;
+                    dialogueW = dialogueList[index].bubble.width;
+                    dialogueH = dialogueList[index].bubble.height;
+                }
+            }
+        })
+    });
 
     function releaseDrag(e) {
         if (draggedDialogue) {

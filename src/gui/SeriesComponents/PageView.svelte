@@ -16,6 +16,8 @@
     let showDialogue = true;
     let showModal = false;
     let selectedDialogue;
+    let files;
+    let lastTimestamp = Date.now();
 
     function selectDialogue(index) {
         if (index !== $currentDialogue) {
@@ -39,6 +41,40 @@
         });
     }
 
+    function inputImage(e) {
+        uploadImage(e.target.files[0]);
+    }
+
+    function dropImage(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const dt = e.dataTransfer;
+        const fs = dt.files;
+        uploadImage(fs[0]);
+    }
+
+    function uploadImage(image) {
+        lastTimestamp = Date.now();
+        const baseData = {
+            series: $currentSeries,
+            volume: `Volume ${$currentVolume}`,
+            chapter: `Chapter ${$currentChapter.id}`,
+            page: `Page ${$currentPage}`,
+            image: selectedImage
+        };
+        const formData = new FormData();
+        formData.append("image", image);
+        formData.append("pageData", JSON.stringify(baseData));
+        fetch('http://localhost:4000/uploadPageImage', { method: "POST", body: formData}).then(() => {
+            fetchPageData($currentSeries, $currentVolume, $currentChapter.id, $currentPage);
+        })
+    }
+
+    function dragHandle(e) {
+        e.stopPropagation();
+        e.preventDefault();
+    }
+
     let dialogueList = [];
     let sourceList = [];
 
@@ -53,7 +89,7 @@
 </script>
 
 <svelte:window
-    on:mousedown={() => {if ($currentDialogue > 0) selectedDialogue.save()}}
+    on:mousedown={() => {if ($currentDialogue >= 0) selectedDialogue.save()}}
 />
 
 <style>
@@ -121,7 +157,7 @@
         overflow-y: auto;
     }
 
-    select, input {
+    .input {
         height: 37px;
         margin-top: auto;
         margin-bottom: auto;
@@ -143,14 +179,14 @@
     </div>
     <div class="notes flex-row">
         <OpenFolder scope="Page"></OpenFolder>
-        <input type="button" value="Delete Page" on:click={() => showModal = true}>
+        <input type="button" value="Delete Page" class="input" on:click={() => showModal = true}>
     </div>
     
     <div class="page-view-contents flex-row">
         <div class="dialogue-boxes">
             <div class="dialogue-header flex-row">
                 <h2>Dialogue Selection</h2>
-                <input type="button" value="Add" on:click={addDialogue}>
+                <input type="button" value="Add" class="input" on:click={addDialogue}>
             </div>
             <div class="dialogue-box-selection flex-column">
                 {#each dialogueList as dialogue, index}
@@ -164,30 +200,44 @@
         </div>
         <div class="page-display-container flex-column">
             <div class="page-display-options flex-row">
-                <select bind:value={selectedImage}>
-                    <option value="full" disabled={!sourceList.full}>
+                <select bind:value={selectedImage} class="input">
+                    <option value="full">
                         Full
                     </option>
-                    <option value="redraw" disabled={!sourceList.redraw}>
+                    <option value="redraw">
                         Redraw
                     </option>
-                    <option value="clean" disabled={!sourceList.clean}>
+                    <option value="clean">
                         Clean
                     </option>
-                    <option value="raw" disabled={!sourceList.raw}>
+                    <option value="raw">
                         Raw
                     </option>
                 </select>
                 <span class="layer-item">
-                    <input type="checkbox" bind:checked={showDialogue}>
+                    <input type="checkbox" class="input" bind:checked={showDialogue}>
                     <div>Show Dialogue</div>
                 </span>
+                <input
+                    type="file"
+                    name="image"
+                    class="input"
+                    bind:files
+                    on:input={inputImage}
+                    on:dragenter={dragHandle}
+                    on:dragover={dragHandle}
+                    on:drop={dropImage}
+                >
             </div>
             <div class="undo-flex">
                 <div bind:this={imageContainer} class="page-image-container">
-                    <img alt="page-image" class="page-image"
-                        src={sourceList[selectedImage] ? `${graphqlBase}/${sourceList[selectedImage]}` : ''}
-                    >
+                    {#if sourceList[selectedImage]}
+                        <img alt="no-page-image" class="page-image"
+                            src={`${graphqlBase}/${sourceList[selectedImage]}?timestamp=${lastTimestamp}`}
+                        >
+                    {:else}
+                        <h2>No image found, please upload one.</h2>
+                    {/if}
                     {#if showDialogue}
                         <!-- {#await $pageData then response}
                             {#each response.data.page.dialogue as dialogue, index}
@@ -205,6 +255,7 @@
                                 initialValues={dialogue.bubble}
                                 tooltip={dialogue.title}
                                 on:select={() => selectDialogue(index)}
+                                {index}
                             ></DraggableDialogue>
                         {/each}
                     {/if}

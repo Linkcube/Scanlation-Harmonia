@@ -72,7 +72,7 @@
                     title={chapter.title}
                     on:click={() => selectItem({ volume: volume.id, chapter: chapter.id, title: chapter.title })}
                 ></TableItem>
-                {#each chapter.pages as page}
+                {#each chapter.pages as page, index}
                     <TableItem
                         id={page.id}
                         itemType="page"

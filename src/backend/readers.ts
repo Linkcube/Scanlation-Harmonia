@@ -11,18 +11,23 @@ import {
   Dirent,
   existsSync,
   readFileSync,
-  writeFileSync
+  writeFileSync,
+  mkdirSync
 } from "fs";
 import { last } from "lodash";
 import * as open from "open";
 
-const exportFolder = join(resolve('.'), "Series");
+const exportFolder = join(resolve("."), "Series");
 
 export const getSeries = () => {
+  const configs: ISeriesConfig[] = [];
+  if (!existsSync(exportFolder)) {
+    mkdirSync(exportFolder);
+    return configs;
+  }
   const dirs: string[] = readdirSync(exportFolder, { withFileTypes: true })
     .filter((file: Dirent) => file.isDirectory())
     .map((dir: Dirent) => dir.name);
-  const configs: ISeriesConfig[] = [];
   dirs.forEach(dir => {
     const volumes = readdirSync(join(exportFolder, dir), {
       withFileTypes: true
@@ -171,6 +176,13 @@ export const getSeriesTree = (data: { series: string }) => {
       if (existsSync(chapterConfig)) {
         chapterTitle = JSON.parse(readFileSync(chapterConfig, "utf-8")).title;
       }
+      chapterPages.sort((a: ISeriesTreeNode, b: ISeriesTreeNode) => {
+        if (a.id && b.id) {
+          if (Number(a.id) > Number(b.id)) return 1;
+          return -1;
+        }
+        return 0;
+      });
       volumeChapters.push({
         id: last(chapter.split(" ")),
         title: chapterTitle,
@@ -182,6 +194,13 @@ export const getSeriesTree = (data: { series: string }) => {
     if (existsSync(volumeConfig)) {
       volumeTitle = JSON.parse(readFileSync(volumeConfig, "utf-8")).title;
     }
+    volumeChapters.sort((a: ISeriesTreeNode, b: ISeriesTreeNode) => {
+      if (a.id && b.id) {
+        if (Number(a.id) > Number(b.id)) return 1;
+        return -1;
+      }
+      return 0;
+    });
     items.push({
       id: last(volume.split(" ")),
       title: volumeTitle,
@@ -218,4 +237,4 @@ export const openFolder = (data: {
   }
   if (existsSync(dirPath)) open(dirPath);
   return "Done";
-}
+};

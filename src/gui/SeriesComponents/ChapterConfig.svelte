@@ -18,6 +18,27 @@
             viewMode.set("volume");
         });
     }
+
+    function inputChapter(e) {
+        uploadChapter(e.target.files);
+    }
+
+    function uploadChapter(files) {
+        const baseData = {
+            series: $currentSeries,
+            volume: `Volume ${$currentVolume}`,
+            chapter: `Chapter ${$currentChapter.id}`
+        };
+        const formData = new FormData();
+        console.log(files);
+        Array.from(files).forEach((file) => {
+            formData.append("files", file);
+        });
+        formData.append("chapterData", JSON.stringify(baseData));
+        fetch('http://localhost:4000/uploadChapter', { method: "POST", body: formData}).then(() => {
+            fetchSeriesTree($currentSeries)
+        })
+    }
 </script>
 
 <style>
@@ -38,6 +59,7 @@
         <input type="button" value="Add Page" on:click={addPage}>
         <input type="button" value="Delete Chapter" on:click={() => showModal = true}>
     </div>
+    <input type="file" webkitdirectory mozdirectory on:change={inputChapter}/>
     <OpenFolder scope="Chapter"></OpenFolder>
     <NoteView scope="Chapter"></NoteView>
 </div>

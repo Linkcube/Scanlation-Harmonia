@@ -1,6 +1,9 @@
+#!/usr/bin/env node
+
 import * as express from "express";
 import * as express_graphql from "express-graphql";
-import { resolve, join } from "path";
+import * as fileUpload from "express-fileupload";
+import { resolve, join, extname } from "path";
 import { SCHEMA } from "./schema";
 import {
   getNotes,
@@ -26,10 +29,12 @@ import {
   saveNotes,
   addStyle,
   editStyle,
-  deleteStyle
+  deleteStyle,
+  cleanPreviousImage
 } from "./writers";
+import { rename, existsSync, unlinkSync, readdirSync, mkdirSync } from "fs";
 
-const exportFolder = join(resolve('.'), "Series");
+const exportFolder = join(resolve("."), "Series");
 const cors = require("cors");
 let app: any;
 
@@ -74,6 +79,71 @@ function startService() {
     })
   );
   app.use(express.static(resolve(exportFolder)));
+  app.use(fileUpload());
+  app.post("/uploadPageImage", (req: any, res: any) => {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send("No files were uploaded");
+    }
+
+    if (!req.body.pageData) {
+      return res.status(400).send("No page data was uploaded");
+    }
+
+    const image = req.files.image;
+    const pageData = JSON.parse(req.body.pageData);
+    const pagePath = join(
+      exportFolder,
+      pageData.series,
+      pageData.volume,
+      pageData.chapter,
+      pageData.page
+    );
+
+    cleanPreviousImage(pagePath, pageData.image);
+
+    image.mv(
+      join(pagePath, pageData.image + extname(image.name)),
+      (err: Error) => {
+        if (err) return res.status(500).send(err);
+
+        res.send("File uploaded!");
+      }
+    );
+  });
+  app.post("/uploadChapter", (req: any, res: any) => {
+    if (!req.body.chapterData) {
+      return res.status(400).send("No page data was uploaded");
+    }
+    const chapterData = JSON.parse(req.body.chapterData);
+    const chapterPath = join(
+      exportFolder,
+      chapterData.series,
+      chapterData.volume,
+      chapterData.chapter
+    );
+    let pageIndex = 1;
+    Array.from(req.files.files).forEach((element: any) => {
+      let done = false;
+      while (!done) {
+        if (!existsSync(join(chapterPath, `Page ${pageIndex}`))) {
+          mkdirSync(join(chapterPath, `Page ${pageIndex}`));
+          element.mv(
+            join(
+              chapterPath,
+              `Page ${pageIndex}`,
+              "raw" + extname(element.name)
+            ),
+            (err: Error) => {
+              if (err) return res.status(500).send(err);
+            }
+          );
+          done = true;
+        }
+        pageIndex += 1;
+      }
+    });
+    res.send("Chapter imported!");
+  });
   app.listen(4000, () =>
     print("Express GraphQL Server Now Running On localhost:4000/graphql")
   );

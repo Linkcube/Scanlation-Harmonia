@@ -33,7 +33,7 @@
     });
 
     export function save() {
-        if ($currentDialogue > 0) {
+        if ($currentDialogue >= 0) {
             return fetchSaveDialogue(
                 $currentSeries,
                 $currentVolume,

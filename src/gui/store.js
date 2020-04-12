@@ -244,6 +244,10 @@ export function fetchAddDialogue(series, volume, chapter, page) {
 }
 
 export function fetchSaveDialogue(series, volume, chapter, page, index, title, style, raw, translated, bubble) {
+    if (bubble === null) {
+        console.log(`Dialogue ${index} has a null bubble!!`);
+        return Promise.resolve();
+    }
     return fetchGraphQL(
         graphqlUrl, {},
         saveDialogueMutation(series, volume, chapter, page, index, title, style, raw, translated, bubble)

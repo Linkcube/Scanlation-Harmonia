@@ -4,6 +4,8 @@
     import Modal from './Modal.svelte';
     import { fetchGetStyles, fetchAddStyle, fetchEditStyle, currentSeries, seriesStyles, fetchDeleteStyle } from '../store.js';
 
+    let openNew = false;
+
     function selectStyle(index) {
         styleTitle = styleList[index].title;
         styleAttributes = styleList[index].attributes;
@@ -13,10 +15,11 @@
 
     function addStyle() {
         fetchAddStyle($currentSeries).then(fetchGetStyles($currentSeries));
+        openNew = true;
     }
 
     function submit() {
-        fetchEditStyle($currentSeries, styleIndex, styleTitle, styleAttributes).then(fetchGetStyles($currentSeries))
+        fetchEditStyle($currentSeries, styleIndex, styleTitle, styleAttributes).then(fetchGetStyles($currentSeries));
     }
 
     function deleteStyle() {
@@ -39,6 +42,10 @@
         Promise.resolve(stylePromise).then((response) => {
             if (response.hasOwnProperty('data')) {
                 styleList = response.data.getStyles;
+                if (openNew) {
+                    selectStyle(styleList.length - 1);
+                    openNew = false;
+                }
             }
         });
     });

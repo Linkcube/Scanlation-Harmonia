@@ -31,7 +31,7 @@ export interface ISeriesTreeNode {
 
 export interface IDialogueData {
   title: string;
-  style: string;
+  style: number;
   raw: string;
   translated: string;
   bubble: IDialogueBubble;
