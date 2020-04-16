@@ -1,5 +1,6 @@
 <script>
 	import { createEventDispatcher, onDestroy } from 'svelte';
+	import FancyButton from './FancyButton.svelte';
 	
 	export let use_submission = true;
 
@@ -50,19 +51,14 @@
 <div class="modal" role="dialog" aria-modal="true" bind:this={modal}>
 	<slot name="header"></slot>
     <br>
-	<!-- <hr> -->
 	<slot></slot>
     <br>
-	<!-- <hr> -->
-
-	<!-- svelte-ignore a11y-autofocus -->
-	<!-- <button autofocus on:click={close}>close modal</button> -->
     <div class="user-actions">
 		{#if use_submission}
-			<span class="cancel" on:click={close}>Cancel</span>
-			<span class="accept" on:click={submission}>Accept</span>
+			<FancyButton on:click={close} value="Cancel" type="warn"/>
+			<FancyButton on:click={submission} value="Accept" type="submit"/>
 		{:else}
-			<span class="accept" on:click={close}>Close</span>
+			<FancyButton on:click={close} value="Close" type="submit"/>
 		{/if}
     </div>
 </div>
@@ -79,7 +75,7 @@
 	}
 
 	.modal {
-		position: absolute;
+		position: fixed;
 		left: 50%;
 		top: 50%;
 		width: calc(100vw - 4em);
@@ -101,31 +97,5 @@
 		-webkit-user-select: none; /* Safari */
         -ms-user-select: none; /* IE 10+ and Edge */
         user-select: none; /* Standard syntax */
-    }
-
-    .cancel {
-        color: red;
-        padding-left: 10px;
-        padding-right: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .cancel:hover {
-        background: rgb(253, 229, 232);
-        transition-duration: 400ms;
-    }
-
-    .accept {
-        color: blue;
-        padding-left: 10px;
-        padding-right: 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .accept:hover {
-        background: rgb(235, 246, 250);
-        transition-duration: 400ms;
     }
 </style>

@@ -19,8 +19,8 @@
     let offsetDragLeft = 0;
     let offsetDragTop = 0;
     let showDialogue;
-    let dialogueH = 40;
-    let dialogueW = 40;
+    let dialogueH = 5;
+    let dialogueW = 5;
     let originalDialogueW;
     let originalDialogueH;
     let originalDialogueY;
@@ -28,8 +28,8 @@
     let originalPointerX;
     let originalPointerY;
     let scaleTarget;
-    let minDialogueWidth = 40;
-    let minDialogueHeight = 40;
+    let minDialogueWidth = 5;
+    let minDialogueHeight = 5;
     let clickedDialogue;
     let relativeX = 0;
     let relativeY = 0;
@@ -169,12 +169,6 @@
             scaleTarget = false;
         }
     }
-
-    function handleClick(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        clickedDialogue = true;
-    }
 </script>
 
 <svelte:window
@@ -229,10 +223,9 @@
 <div
     bind:this={dialogue}
     on:mousedown={startDrag}
-    on:click={handleClick}
     title={tooltip}
     class="draggable-dialogue"
-    style="--w: {dialogueW}px; --h: {dialogueH}px; --x: {relativeX}px; --y: {relativeY}px"
+    style="--w: {dialogueW}%; --h: {dialogueH}%; --x: {relativeX}%; --y: {relativeY}%"
 >
     {#if clickedDialogue}
         <div on:mousedown={startScale} class="top-left scale material-icons"></div>

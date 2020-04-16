@@ -207,6 +207,16 @@ const saveNotesMutation = (notes, series, volume, chapter, page) => {
     }`;
 }
 
+const getExportFolderQuery = `
+query {
+    getExportFolder
+}`;
+
+const setExportFolderMutation = (newFolder) => `
+mutation {
+    setExportFolder(newFolder: "${newFolder}")
+}`;
+
 export function fetchSeries() {
     seriesList.set(fetchGraphQL(
         graphqlUrl, {},
@@ -363,5 +373,19 @@ export function fetchOpenFolder(series, volume, chapter, page) {
     return fetchGraphQL(
         graphqlUrl, {},
         openFolderQuery(series, volume, chapter, page)
+    );
+}
+
+export function fetchGetExportFolder() {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        getExportFolderQuery
+    );
+}
+
+export function fetchSetExportFolder(newFolder) {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        setExportFolderMutation(newFolder)
     );
 }

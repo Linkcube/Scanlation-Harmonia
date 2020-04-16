@@ -1,3 +1,7 @@
+<script>
+    import { seriesList } from '../store.js';
+</script>
+
 <style>
     header {
 		flex-shrink: 0;
@@ -27,18 +31,21 @@
     <div class="text-alignment">
         <div>
             <p style="--primary-color:white">
-                [WIP]Scanlation Assistant
+                Scanlation Harmonia
             </p>
         </div>
-        <!-- <div>
-            <p style="--primary-color:white">
-                Series Selection
-            </p>
-        </div> -->
         <div>
-            <p style="--primary-color:white">
-                Series Found: #
-            </p>
+            {#await $seriesList then value}
+                {#if Object.keys(value).length > 0}
+                    <p style="--primary-color:white">
+                        Series Found: { value.data.series.length }
+                    </p>
+                {:else}
+                    <p style="--primary-color:white">
+                        Series Found: #
+                    </p>
+                {/if}
+            {/await}
         </div>
     </div>
 </header>

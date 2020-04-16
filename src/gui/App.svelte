@@ -11,6 +11,7 @@
 		margin: 0px;
 		display: flex;
 		flex-direction: column;
+		min-width: 700px;
 	}
 </style>
 

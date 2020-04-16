@@ -1,8 +1,10 @@
 <script>
     import { currentSeries, currentVolume, fetchAddChapter, fetchSeriesTree, fetchDeleteVolume, viewMode } from '../store.js';
     import NoteView from './NoteView.svelte';
-    import Modal from './Modal.svelte';
+    import Modal from '../shared/Modal.svelte';
     import OpenFolder from './OpenFolder.svelte';
+    import FancyButton from '../shared/FancyButton.svelte';
+    import IconButton from '../shared/IconButton.svelte';
 
     let showModal = false;
 
@@ -22,7 +24,7 @@
 
 <style>
     .volume-view-contents {
-        justify-content: space-around;
+        justify-content: space-evenly;
     }
 
     .flex-row {
@@ -34,10 +36,10 @@
 
 <div class="volume-view-container flex-column">
     <div class="volume-view-contents flex-row">
-        <input type="button" value="Add Chapter" on:click={addChapter}>
-        <input type="button" value="Delete Volume" on:click={() => showModal = true}>
+        <FancyButton value="Add Chapter" on:click={addChapter}/>
+        <OpenFolder scope="Volume"></OpenFolder>
+        <IconButton icon="delete_forever" title="Delete Volume" type="warn" on:click={() => showModal = true}/>
     </div>
-    <OpenFolder scope="Volume"></OpenFolder>
     <NoteView scope="Volume"></NoteView>
 </div>
 

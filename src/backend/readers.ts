@@ -17,7 +17,11 @@ import {
 import { last } from "lodash";
 import * as open from "open";
 
-const exportFolder = join(resolve("."), "Series");
+let exportFolder = join(resolve("."), "Series");
+
+export const updateReaderExportFolder = (newFolder: string) => {
+  exportFolder = newFolder;
+}
 
 export const getSeries = () => {
   const configs: ISeriesConfig[] = [];
@@ -238,3 +242,7 @@ export const openFolder = (data: {
   if (existsSync(dirPath)) open(dirPath);
   return "Done";
 };
+
+export const getExportFolder = () => {
+  return exportFolder;
+}

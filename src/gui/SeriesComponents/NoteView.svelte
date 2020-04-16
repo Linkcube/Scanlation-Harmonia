@@ -1,6 +1,8 @@
 <script>
     import { onMount } from 'svelte';
     import { currentSeries, currentVolume, currentChapter, currentPage, fetchGetNotes, fetchSaveNotes } from '../store.js';
+    import FancyTextArea from '../shared/FancyTextArea.svelte';
+    import FancySelect from '../shared/FancySelect.svelte';
     export let scope;
     let selected;
     let noteValue;
@@ -79,44 +81,34 @@
         justify-content: center;;
     }
 
-    .text {
-        margin-top: auto;
-        margin-bottom: auto;
-    }
-
-    textarea.notes-field {
-        height: 500px;
-        width: 700px;
-        resize: none;
-    }
-
-    select, input {
-        height: 37px;
-        margin-top: auto;
-        margin-bottom: auto;
+    .note-container {
+        min-width: 700px;
+        margin-top: 20px;
     }
 </style>
 
 
-
-<div class="note-scope">
-    <div class="text">
-        <h2>Note Scope</h2>
+<div class="note-container">
+    <div class="note-scope">
+        <!-- <div class="text">
+            <h2>Note Scope</h2>
+        </div> -->
+        <!-- <select bind:value={selected} on:change={changeNoteScope}> -->
+        <FancySelect bind:value={selected} on:change={changeNoteScope} label="Note Scope">
+            {#if scope === "Page"}
+                <option>Page</option>
+            {/if}
+            {#if scope === "Page" || scope === "Chapter"}
+                <option>Chapter</option>
+            {/if}
+            {#if scope === "Page" || scope === "Chapter" || scope == "Volume"}
+                <option>Volume</option>
+            {/if}
+            <option>Series</option>
+        <!-- </select> -->
+        </FancySelect>
     </div>
-    <select bind:value={selected} on:change={changeNoteScope}>
-        {#if scope === "Page"}
-            <option>Page</option>
-        {/if}
-        {#if scope === "Page" || scope === "Chapter"}
-            <option>Chapter</option>
-        {/if}
-        {#if scope === "Page" || scope === "Chapter" || scope == "Volume"}
-            <option>Volume</option>
-        {/if}
-        <option>Series</option>
-    </select>
-    <!-- <input type="button" value="Save" class="save-btn" on:click={saveNote}> -->
-</div>
-<div class="center-text">
-    <textarea class="notes-field" placeholder="Notes" bind:value={noteValue} on:blur={saveNote}></textarea>
+    <div class="center-text">
+        <FancyTextArea label="Notes" bind:value={noteValue} on:blur={saveNote} height=500 width=700 resize="none"/>
+    </div>
 </div>

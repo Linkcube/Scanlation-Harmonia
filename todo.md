@@ -11,9 +11,12 @@ x Save/load
 x Create backend reader/writer
 x UI create/edit/delete
 x Load list to display in dialogues
+- Have unified styling
 
 ## Import
-- Have an import option for page images
+x Have an import option for page images
+x Import chapters
+- Smarter import (raw->raw, clean->clean, etc)
 
 ## Delete dialog
 x Confirm deletes, also move the delete page button our of the way (flex-end?)
@@ -39,3 +42,38 @@ x Have dialogue boxes on the page
 ## Autosave
 x Dialogue text as well as box placement
 x Hopefully remove the save button all-together
+
+## Multiple target languages for translation
+- Select options for dialogue boxes
+- Select option for finished picture
+- Keep language setting in the series config
+
+## Scalable pic (on hold)
+- Allow the user to scale the selected image/dialogue boxes
+- Also have enlarged modal view?
+
+## Larger display targets
+~ Have contents re-arrange themselves for wider windows (flex-wrap)
+- Impove usability on wider windows.
+
+
+## Testing notes
+x Allow for hitting enter in text fields to = clicking the related button (i.e. add series)
+- Allow for right clicking on the series list to delete objects
+- Allow for centering/better layout
+- View all items if possible
+    + Probably move selected dialogue beneath dialogue selection, and have dialogue table scroll
+~ Make the dialogue scaling more noticable (corner icons)
+- Maybe foreward/backward browser actions
+x Page to page navigation
+    + Click on Page # header and have it have dropdown of other pages
+    + Arrow nav around the page header as well
+x Create vol/chapter/page 1 on series creation
+
+## Icons
+x Convert to icons to save space
+- Style to make better use of icons
+
+## Changeable export folder
+x Allow the user to change the folder
+- Verify contents before displaying (config.json)

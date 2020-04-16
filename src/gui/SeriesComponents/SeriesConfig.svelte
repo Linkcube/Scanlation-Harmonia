@@ -2,8 +2,11 @@
     import { currentSeries, currentVolume, currentChapter, currentPage, fetchAddVolume, pageMode, fetchSeriesTree, fetchDeleteSeries } from '../store.js';
     import NoteView from './NoteView.svelte';
     import StyleTable from './StyleTable.svelte';
-    import Modal from './Modal.svelte';
+    import Modal from '../shared/Modal.svelte';
     import OpenFolder from './OpenFolder.svelte';
+    import FancyButton from '../shared/FancyButton.svelte';
+    import FancyFile from '../shared/FancyFile.svelte';
+    import IconButton from '../shared/IconButton.svelte';
 
     let showModal = false;
 
@@ -22,45 +25,37 @@
             pageMode.set('series-select');
         });
     }
+
+    function uploadImage(e) {
+        console.log(e);
+        const formData = new FormData();
+        formData.append("image", e.detail);
+        formData.append("series", JSON.stringify($currentSeries));
+        fetch('http://localhost:4000/uploadSeriesImage', { method: "POST", body: formData})
+    }
 </script>
 
 <style>
     .series-view-contents {
-        justify-content: space-around;
+        justify-content: space-evenly;
     }
 
     .flex-row {
         display: flex;
         flex-direction: row;
     }
-
-    .user-inputs {
-        justify-content: center;
-    }
-
-    textarea.regex-rules {
-        height: 200px;
-        min-width: 350px;
-        resize: none;
-    }
 </style>
 
 
 <div class="series-view-container flex-column">
     <div class="series-view-contents flex-row">
-        <input type="button" value="Add Volume" on:click={addVolume}>
-        <input type="button" value="Delete Series" on:click={() => showModal = true}>
+        <FancyButton value="Add Volume" on:click={addVolume}/>
+        <OpenFolder scope="Series"></OpenFolder>
+        <FancyFile on:upload={uploadImage} icon={true} value="Change Series Cover"/>
+        <IconButton icon="delete_forever" title="Delete Series" type="warn" on:click={() => showModal = true}/>
     </div>
-    <OpenFolder scope="Series"></OpenFolder>
     <StyleTable></StyleTable>
     <NoteView scope="Series"></NoteView>
-    <!-- <div class="series-view-contents flex-row">
-        <h2>Regex Rules</h2>
-    </div>
-    <div class="user-inputs flex-row">
-        <textarea class="regex-rules" placeholder="Raw Text Rules"></textarea>
-        <textarea class="regex-rules" placeholder="Translated Text Rules"></textarea>
-    </div> -->
 </div>
 
 {#if showModal}

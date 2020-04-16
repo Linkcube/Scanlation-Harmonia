@@ -1,8 +1,11 @@
 <script>
     import { onMount } from 'svelte';
     import TableItem from './TableItem.svelte';
-    import Modal from './Modal.svelte';
+    import Modal from '../shared/Modal.svelte';
     import { fetchGetStyles, fetchAddStyle, fetchEditStyle, currentSeries, seriesStyles, fetchDeleteStyle } from '../store.js';
+    import FancyButton from '../shared/FancyButton.svelte';
+    import FancyInput from '../shared/FancyInput.svelte';
+    import FancyTextArea from '../shared/FancyTextArea.svelte';
 
     let openNew = false;
 
@@ -54,11 +57,6 @@
 </script>
 
 <style>
-    input {
-        height: 37px;
-        margin-top: auto;
-        margin-bottom: auto;
-    }
     .style-container {
         display: flex;
         flex-direction: column;
@@ -76,12 +74,23 @@
         display: flex;
         flex-direction: column;
     }
+
+    .top-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+    .bottom-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
 </style>
 
 <div class="style-container">
     <div class="style-header">
         <h2>Style Configuration</h2>
-        <input type="button" value="Add" on:click={addStyle}>
+        <FancyButton value="Add Style" on:click={addStyle}/>
     </div>
     <div class="style-selection">
         {#each styleList as style, index}
@@ -96,10 +105,12 @@
 
 {#if showModal}
     <Modal on:close={() => showModal = false} on:submission={submit}>
-        <div class="style-title">
-            <input bind:value={styleTitle}>
+        <div class="top-row">
+            <FancyInput label="Style Title" bind:value={styleTitle}/>
+            <FancyButton value="Delete" type="warn" on:click={deleteStyle}/>
         </div>
-        <textarea class="style-attributes" placeholder="Style Attributes" bind:value={styleAttributes}></textarea>
-        <input type="button" value="Delete" on:click={deleteStyle}>
+        <div class="bottom-row">
+            <FancyTextArea label="Style Attributes" bind:value={styleAttributes} width=500 resize="vertical"/>
+        </div>
     </Modal>
 {/if}

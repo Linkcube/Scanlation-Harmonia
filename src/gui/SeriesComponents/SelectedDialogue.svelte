@@ -1,7 +1,11 @@
 <script>
     import { pageDialogue, fetchSaveDialogue, currentSeries, currentVolume, currentChapter,currentPage,
     currentDialogue, fetchDeleteDialogue, fetchPageData, dialogueBubble, seriesStyles } from '../store.js';
-    import Modal from './Modal.svelte';
+    import Modal from '../shared/Modal.svelte';
+    import IconButton from '../shared/IconButton.svelte';
+    import FancyInput from '../shared/FancyInput.svelte';
+    import FancyTextArea from '../shared/FancyTextArea.svelte';
+    import FancySelect from '../shared/FancySelect.svelte';
 
     const config = {
         title: '',
@@ -71,24 +75,14 @@
     .selected-dialogue {
         display: flex;
         flex-direction: column;
+        min-width: 350px;
     }
 
     .center-text {
         display: flex;
         flex-direction: row;
         justify-content: center;;
-    }
-
-    textarea.user-input {
-        height: 250px;
-        width: 350px;
-        resize: none;
-    }
-
-    textarea.regex-result {
-        height: 150px;
-        min-width: 350px;
-        resize: none;
+        flex-wrap: wrap;
     }
 
     .style-selection {
@@ -97,51 +91,33 @@
         margin-bottom: auto;
     }
 
-    .save-btn {
-        height: 37px;
-        margin-top: auto;
-        margin-bottom: auto;
-    }
-
     .dialogue-settings {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
-    }
-
-    select, input {
-        height: 37px;
-        margin-top: auto;
-        margin-bottom: auto;
+        flex-wrap: wrap;
     }
 </style>
 
-<div class="selected-dialogue">
-    {#if $currentDialogue >= 0 }
+{#if $currentDialogue >= 0 }
+    <div class="selected-dialogue">
         <div class="dialogue-settings">
-            <h2>Dialogue: </h2>
-            <input bind:value={config.title} on:blur={save}>
+            <FancyInput bind:value={config.title} label="Dialogue Title" on:blur={save}/>
             <div class="style-selection">
-                <p>Dialogue Style:</p>
-                <select bind:value={config.style} on:blur={save}>
+                <FancySelect bind:value={config.style} on:blur={save} label="Dialogue Style">
                     {#each styleList as style, index}
                         <option value={index}>{style.title}</option>
                     {/each}
-                </select>
+                </FancySelect>
             </div>
-            <!-- <input type="button" value="Save" class="save-btn" on:click={save}> -->
-            <input type="button" value="Delete" class="save-btn" on:click={() => showModal = true}>
+            <IconButton icon="delete_forever" title="Delete Dialogue" type="warn" on:click={() => showModal = true}/>
         </div>
         <div class="center-text">
-            <textarea class="user-input" placeholder="Raw Text" bind:value={config.raw} on:blur={save}></textarea>
-            <textarea class="user-input" placeholder="Translated Text" bind:value={config.translated} on:blur={save}></textarea>
+            <FancyTextArea label="Raw Text" bind:value={config.raw} on:blur={save} height=200 width=270 resize="none"/>
+            <FancyTextArea label="Translated Text" bind:value={config.translated} on:blur={save} height=200 width=270 resize="none"/>
         </div>
-        <!-- <div class="center-text">
-            <textarea class="regex-result" placeholder="Raw Text Regex" readonly></textarea>
-            <textarea class="regex-result" placeholder="Translated Text Regex" readonly></textarea>
-        </div> -->
-    {/if}
-</div>
+    </div>
+{/if}
 
 {#if showModal}
     <Modal on:close={() => showModal = false} on:submission={deleteDialogue}>

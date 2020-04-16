@@ -9,6 +9,7 @@ type Query {
     pageDialogue(series: String!, volume: String!, chapter: String!, page: String!, dialogue: Int!): dialogueObject
     getStyles(series: String!): [styleObject]
     openFolder(series: String!, volume: String, chapter: String, page: String): String
+    getExportFolder: String
 },
 type Mutation {
     addDialogue(series: String!, volume: String!, chapter: String!, page: String!): String
@@ -28,6 +29,7 @@ type Mutation {
     addStyle(series: String!): String
     editStyle(series: String!, index: Int!, title: String!, attributes: String!): String
     deleteStyle(series: String!, index: Int!): String
+    setExportFolder(newFolder: String!): String
 },
 type seriesObject {
     title: String

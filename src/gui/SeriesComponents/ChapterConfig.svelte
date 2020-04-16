@@ -1,8 +1,11 @@
 <script>
     import { currentSeries, currentVolume, currentChapter, fetchAddPage, fetchSeriesTree, fetchDeleteChapter, viewMode } from '../store.js';
     import NoteView from './NoteView.svelte';
-    import Modal from './Modal.svelte';
+    import Modal from '../shared/Modal.svelte';
     import OpenFolder from './OpenFolder.svelte';
+    import FancyButton from '../shared/FancyButton.svelte';
+    import FancyFile from '../shared/FancyFile.svelte';
+    import IconButton from '../shared/IconButton.svelte';
 
     let showModal = false;
 
@@ -19,19 +22,14 @@
         });
     }
 
-    function inputChapter(e) {
-        uploadChapter(e.target.files);
-    }
-
-    function uploadChapter(files) {
+    function uploadChapter(e) {
         const baseData = {
             series: $currentSeries,
             volume: `Volume ${$currentVolume}`,
             chapter: `Chapter ${$currentChapter.id}`
         };
         const formData = new FormData();
-        console.log(files);
-        Array.from(files).forEach((file) => {
+        Array.from(e.detail).forEach((file) => {
             formData.append("files", file);
         });
         formData.append("chapterData", JSON.stringify(baseData));
@@ -43,7 +41,7 @@
 
 <style>
     .chapter-view-contents {
-        justify-content: space-around;
+        justify-content: space-evenly;
         margin-bottom: 20px;
     }
 
@@ -56,11 +54,11 @@
 
 <div class="chapter-view-container flex-column">
     <div class="chapter-view-contents flex-row">
-        <input type="button" value="Add Page" on:click={addPage}>
-        <input type="button" value="Delete Chapter" on:click={() => showModal = true}>
+        <FancyButton value="Add Page" on:click={addPage}/>
+        <OpenFolder scope="Chapter"></OpenFolder>
+        <FancyFile on:upload={uploadChapter} value="Import Pages" icon={true} directory={true}/>
+        <IconButton icon="delete_forever" title="Delete Chapter" type="warn" on:click={() => showModal = true}/>
     </div>
-    <input type="file" webkitdirectory mozdirectory on:change={inputChapter}/>
-    <OpenFolder scope="Chapter"></OpenFolder>
     <NoteView scope="Chapter"></NoteView>
 </div>
 

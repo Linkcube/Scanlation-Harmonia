@@ -11,7 +11,11 @@ import {
 import { sync as rimrafSync } from "rimraf";
 import { IDialogueBubble, IStyle, IDialogueData } from "./types";
 
-const exportFolder = join(resolve("."), "Series");
+let exportFolder = join(resolve("."), "Series");
+
+export const updateWriterExportFolder = (newFolder: string) => {
+  exportFolder = newFolder;
+}
 
 export const addDialogue = (data: {
   series: string;
@@ -137,6 +141,9 @@ export const addSeries = (data: { series: string }) => {
   const seriesPath = join(exportFolder, data.series);
   if (!existsSync(seriesPath)) {
     mkdirSync(seriesPath);
+    mkdirSync(join(seriesPath, "Volume 1"));
+    mkdirSync(join(seriesPath, "Volume 1", "Chapter 1"));
+    mkdirSync(join(seriesPath, "Volume 1", "Chapter 1", "Page 1"));
   }
   return "Done";
 };
@@ -258,7 +265,7 @@ export const deleteStyle = (data: { series: string; index: number }) => {
   return "Done";
 };
 
-export const cleanPreviousImage = (pagePath: string, scope: string) => {
+export const cleanPreviousPageImage = (pagePath: string, scope: string) => {
   const pageFiles: string[] = readdirSync(pagePath, { withFileTypes: true })
     .filter((file: Dirent) => file.isFile())
     .map((file: Dirent) => file.name);
@@ -271,6 +278,17 @@ export const cleanPreviousImage = (pagePath: string, scope: string) => {
       unlinkSync(join(pagePath, file));
     } else if (file.includes("full.") && scope === "full") {
       unlinkSync(join(pagePath, file));
+    }
+  });
+};
+
+export const cleanPreviousSeriesImage = (seriesPath: string) => {
+  const seriesFiles: string[] = readdirSync(seriesPath, { withFileTypes: true })
+    .filter((file: Dirent) => file.isFile())
+    .map((file: Dirent) => file.name);
+    seriesFiles.forEach(file => {
+    if (file.includes("cover.")) {
+      unlinkSync(join(seriesPath, file));
     }
   });
 };

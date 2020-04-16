@@ -3,7 +3,7 @@
 import * as express from "express";
 import * as express_graphql from "express-graphql";
 import * as fileUpload from "express-fileupload";
-import { resolve, join, extname } from "path";
+import { resolve, join, extname, format, parse } from "path";
 import { SCHEMA } from "./schema";
 import {
   getNotes,
@@ -12,7 +12,9 @@ import {
   getPageData,
   getPageDialogue,
   getStyles,
-  openFolder
+  openFolder,
+  updateReaderExportFolder,
+  getExportFolder
 } from "./readers";
 import {
   addDialogue,
@@ -30,11 +32,34 @@ import {
   addStyle,
   editStyle,
   deleteStyle,
-  cleanPreviousImage
+  cleanPreviousPageImage,
+  cleanPreviousSeriesImage,
+  updateWriterExportFolder
 } from "./writers";
-import { rename, existsSync, unlinkSync, readdirSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, mkdir } from "fs";
 
-const exportFolder = join(resolve("."), "Series");
+let exportFolder = join(resolve("."), "Series");
+
+const setExportFolder = (data: {newFolder: string}) => {
+  let parsedPath: string;
+  if (data.newFolder === "") {
+    parsedPath = format(parse("."));
+  } else {
+    parsedPath = format(parse(data.newFolder));
+  }
+  mkdir(parsedPath, (err) => {
+    if (err && err.code !== "EEXIST") {
+      console.log(err);
+      return "Failed";
+    }
+    exportFolder = parsedPath;
+    app.use(express.static(resolve(parsedPath)));
+    updateReaderExportFolder(parsedPath);
+    updateWriterExportFolder(parsedPath);
+    return "Done";
+  });
+}
+
 const cors = require("cors");
 let app: any;
 
@@ -60,7 +85,9 @@ const root = {
   addStyle,
   editStyle,
   deleteStyle,
-  openFolder
+  openFolder,
+  getExportFolder,
+  setExportFolder
 };
 
 function print(msg: string) {
@@ -99,7 +126,7 @@ function startService() {
       pageData.page
     );
 
-    cleanPreviousImage(pagePath, pageData.image);
+    cleanPreviousPageImage(pagePath, pageData.image);
 
     image.mv(
       join(pagePath, pageData.image + extname(image.name)),
@@ -143,6 +170,26 @@ function startService() {
       }
     });
     res.send("Chapter imported!");
+  });
+  app.post("/uploadSeriesImage", (req: any, res: any) => {
+    if (!req.body.series) {
+      return res.status(400).send("No series data was uploaded");
+    }
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send("No files were uploaded");
+    }
+    const image = req.files.image;
+    const seriesPath = join(exportFolder, JSON.parse(req.body.series));
+    const coverPath = join(seriesPath, "cover" + extname(image.name));
+    console.log(coverPath);
+
+    cleanPreviousSeriesImage(seriesPath);
+
+    image.mv(coverPath, (err: Error) => {
+      if (err) return res.status(500).send(err);
+
+      res.send("Cover uploaded!");
+    });
   });
   app.listen(4000, () =>
     print("Express GraphQL Server Now Running On localhost:4000/graphql")

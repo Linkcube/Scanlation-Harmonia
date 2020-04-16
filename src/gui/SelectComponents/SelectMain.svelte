@@ -1,6 +1,16 @@
 <script>
     import PreviewCard from 'svelte-preview-card';
-    import { pageMode, currentSeries, seriesList, fetchSeries, fetchSeriesTree, graphqlBase, fetchAddSeries } from '../store.js';
+    import {
+        pageMode, currentSeries, seriesList, fetchSeries,
+        fetchSeriesTree, graphqlBase, fetchAddSeries,
+        fetchGetExportFolder, fetchSetExportFolder
+    } from '../store.js';
+    import FancyInput from '../shared/FancyInput.svelte';
+    import FancyButton from '../shared/FancyButton.svelte';
+
+    const series = [];
+    let newName = "";
+    let newFolder = "";
 
     function selectSeries(series) {
         currentSeries.set(series);
@@ -14,8 +24,15 @@
         );
     }
 
-    const series = [];
-    let newName = "";
+    function setFolder() {
+        fetchSetExportFolder(newFolder).then((promise) => {
+            Promise.resolve(promise).then((response) => {
+                if (response.hasOwnProperty('data')) {
+                    fetchSeries();
+                }
+            })
+        });
+    };
 
     // seriesList.subscribe((promise) => {
     //     Promise.resolve(promise).then((response) => {
@@ -26,6 +43,13 @@
     // })
 
     fetchSeries();
+    fetchGetExportFolder().then(promise => {
+        Promise.resolve(promise).then(response => {
+            if (response.hasOwnProperty('data')) {
+                newFolder = response.data.getExportFolder;
+            }
+        })
+    });
 </script>
 
 <style>
@@ -41,6 +65,12 @@
 
     .title {
         text-align: center;
+    }
+
+    .series-form {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
     }
 
     .card-display {
@@ -73,9 +103,13 @@
         <h1>Series Selection</h1>
     </div>
     <div class="series-form">
-        <input placeholder="Series Name" bind:value={newName}>
-        <input type="button" value="Add Series" on:click={addSeries}> 
-    </div>    
+        <FancyInput label="Series Name" bind:value={newName} on:enter={addSeries}></FancyInput>
+        <FancyButton value="Add Series" on:click={addSeries}></FancyButton>
+    </div>
+    <div class="series-form">
+        <FancyInput label="Series Folder Path" bind:value={newFolder} on:enter={setFolder}></FancyInput>
+        <FancyButton value="Set Series Folder" on:click={setFolder}></FancyButton>
+    </div>
     <div class="card-display">
         {#await $seriesList}
             <div class="loader"></div>

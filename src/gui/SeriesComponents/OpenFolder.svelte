@@ -1,5 +1,6 @@
 <script>
     import { currentSeries, currentVolume, currentChapter, currentPage, fetchOpenFolder } from '../store.js';
+    import IconButton from '../shared/IconButton.svelte';
     export let scope;
 
     function openFolder() {
@@ -15,22 +16,5 @@
     }
 </script>
 
-<style>
-    .container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-    }
 
-    input {
-        height: 37px;
-        margin-top: auto;
-        margin-bottom: auto;
-    }
-</style>
-
-
-
-<div class="container">
-    <input type="button" value={`Open ${scope} Folder`} class="save-btn" on:click={openFolder}>
-</div>
+<IconButton title={`Open ${scope} Folder`} icon={"folder_open"} on:click={openFolder}/>

@@ -7,6 +7,7 @@
     import SeriesConfig from './SeriesComponents/SeriesConfig.svelte';
     import { pageMode, navOpen, viewMode, currentSeries, currentVolume, currentChapter, currentPage } from './store.js';
     import SeriesTable from './SeriesComponents/SeriesTable.svelte';
+    import FancyButton from './shared/FancyButton.svelte';
 
     function seriesSelection() {
         currentVolume.set(null);
@@ -39,7 +40,7 @@
 
     .select-container {
         flex-direction: column;
-        width: 300px;
+        width: 200px;
         display: flex;
         position: fixed;
         top: 0px;
@@ -47,10 +48,11 @@
         height: 100%;
         transition-duration: 400ms;
         background: white;
+        z-index: 1;
     }
 
     .hide-nav {
-        left: -300px;
+        left: -200px;
     }
 
     .series-view-container {
@@ -63,6 +65,7 @@
         display: flex;
         flex-direction: column;
         width: 100%;
+        overflow-x: auto;
     }
 
     .nav-path {
@@ -78,7 +81,7 @@
     }
 
     .nav-padding {
-        padding-left: 300px;
+        padding-left: 200px;
     }
 
     a, a:hover, a:visited {
@@ -93,7 +96,7 @@
     </div>
     <div class="right-side">
         <div class="page-view-header flex-row" class:no-margin={!$navOpen}>
-            <input type="button" value="Toggle Nav" class="save-btn" on:click={navOpen.set(!$navOpen)}>
+            <FancyButton value="Toggle Nav" on:click={navOpen.set(!$navOpen)}/>
             <div class="nav-path">
                 <a on:click={() => viewMode.set("series")} href="#series">{$currentSeries}</a>
                 {#if $viewMode === "page" || $viewMode === "volume" || $viewMode === "chapter"}
@@ -103,7 +106,7 @@
                     {/if}
                 {/if}
             </div>
-            <input type="button" value="Series Select" class="save-btn" on:click={seriesSelection}>
+            <FancyButton value="Series Select" on:click={seriesSelection}/>
         </div>
         <div class="view-mode" class:nav-padding={$navOpen}>
             {#if $viewMode === "page"}
