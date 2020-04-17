@@ -214,7 +214,7 @@ query {
 
 const setExportFolderMutation = (newFolder) => `
 mutation {
-    setExportFolder(newFolder: "${newFolder}")
+    setExportFolder(newFolder: """${newFolder}""")
 }`;
 
 export function fetchSeries() {

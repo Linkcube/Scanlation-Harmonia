@@ -41,7 +41,9 @@
 
 <style>
     .chapter-view-contents {
-        justify-content: space-evenly;
+        justify-content: space-between;
+        width: 50%;
+        margin-left: 25%;
         margin-bottom: 20px;
     }
 
@@ -54,9 +56,11 @@
 
 <div class="chapter-view-container flex-column">
     <div class="chapter-view-contents flex-row">
-        <FancyButton value="Add Page" on:click={addPage}/>
-        <OpenFolder scope="Chapter"></OpenFolder>
-        <FancyFile on:upload={uploadChapter} value="Import Pages" icon={true} directory={true}/>
+        <div class="flex-row">
+            <IconButton icon="note_add" title="Add Page" on:click={addPage}/>
+            <OpenFolder scope="Chapter"></OpenFolder>
+            <FancyFile on:upload={uploadChapter} value="Import Pages" icon={true} directory={true}/>
+        </div>
         <IconButton icon="delete_forever" title="Delete Chapter" type="warn" on:click={() => showModal = true}/>
     </div>
     <NoteView scope="Chapter"></NoteView>

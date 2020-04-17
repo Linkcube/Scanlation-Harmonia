@@ -24,7 +24,9 @@
 
 <style>
     .volume-view-contents {
-        justify-content: space-evenly;
+        justify-content: space-between;
+        width: 50%;
+        margin-left: 25%;
     }
 
     .flex-row {
@@ -36,8 +38,10 @@
 
 <div class="volume-view-container flex-column">
     <div class="volume-view-contents flex-row">
-        <FancyButton value="Add Chapter" on:click={addChapter}/>
-        <OpenFolder scope="Volume"></OpenFolder>
+        <div class="flex-row">
+            <IconButton icon="create_new_folder" title="Add Chapter" on:click={addChapter}/>
+            <OpenFolder scope="Volume"></OpenFolder>
+        </div>
         <IconButton icon="delete_forever" title="Delete Volume" type="warn" on:click={() => showModal = true}/>
     </div>
     <NoteView scope="Volume"></NoteView>

@@ -4,6 +4,7 @@
     import Modal from '../shared/Modal.svelte';
     import { fetchGetStyles, fetchAddStyle, fetchEditStyle, currentSeries, seriesStyles, fetchDeleteStyle } from '../store.js';
     import FancyButton from '../shared/FancyButton.svelte';
+    import IconButton from '../shared/IconButton.svelte';
     import FancyInput from '../shared/FancyInput.svelte';
     import FancyTextArea from '../shared/FancyTextArea.svelte';
 
@@ -60,14 +61,14 @@
     .style-container {
         display: flex;
         flex-direction: column;
-        width: 70%;
-        margin: auto;
+        width: 50%;
+        margin-left: 25%;
         margin-bottom: 20px;
     }
     .style-header {
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: flex-start;
     }
     .style-selection {
         max-height: 700px;
@@ -85,12 +86,20 @@
         flex-direction: row;
         justify-content: center;
     }
+
+    span {
+        font-size: large;
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-right: 10px;
+    }
 </style>
 
 <div class="style-container">
     <div class="style-header">
-        <h2>Style Configuration</h2>
-        <FancyButton value="Add Style" on:click={addStyle}/>
+        <span>Style Configuration</span>
+        <!-- <FancyButton value="Add Style" on:click={addStyle}/> -->
+        <IconButton icon="add_box" title="Add Style" on:click={addStyle}/>
     </div>
     <div class="style-selection">
         {#each styleList as style, index}
@@ -107,7 +116,8 @@
     <Modal on:close={() => showModal = false} on:submission={submit}>
         <div class="top-row">
             <FancyInput label="Style Title" bind:value={styleTitle}/>
-            <FancyButton value="Delete" type="warn" on:click={deleteStyle}/>
+            <!-- <FancyButton value="Delete" type="warn" on:click={deleteStyle}/> -->
+            <IconButton icon="delete_forever" title="Delete Style" type="warn" on:click={deleteStyle}/>
         </div>
         <div class="bottom-row">
             <FancyTextArea label="Style Attributes" bind:value={styleAttributes} width=500 resize="vertical"/>

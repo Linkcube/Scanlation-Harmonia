@@ -15,7 +15,7 @@ let exportFolder = join(resolve("."), "Series");
 
 export const updateWriterExportFolder = (newFolder: string) => {
   exportFolder = newFolder;
-}
+};
 
 export const addDialogue = (data: {
   series: string;
@@ -286,7 +286,7 @@ export const cleanPreviousSeriesImage = (seriesPath: string) => {
   const seriesFiles: string[] = readdirSync(seriesPath, { withFileTypes: true })
     .filter((file: Dirent) => file.isFile())
     .map((file: Dirent) => file.name);
-    seriesFiles.forEach(file => {
+  seriesFiles.forEach(file => {
     if (file.includes("cover.")) {
       unlinkSync(join(seriesPath, file));
     }

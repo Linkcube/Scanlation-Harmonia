@@ -164,7 +164,7 @@
     }
 
     .page-display-options {
-        justify-content: space-around;
+        justify-content: space-between;
     }
 
     .undo-flex {
@@ -187,12 +187,14 @@
         overflow-y: auto;
     }
 
-    .notes {
-        justify-content: space-around;
+    .page-view-header {
+        justify-content: space-between;
+        width: 50%;
+        margin-left: 25%;
     }
 
     .dialogue-header {
-        justify-content: space-around;
+        justify-content: flex-start;
     }
 
     .page-scaler {
@@ -210,18 +212,31 @@
         font-size: x-large;
         color: black;
     }
+
+    .nav-button:disabled {
+        cursor: none;
+    }
+
+    .dialogue-selection-title {
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-right: 10px;
+        font-size: large;
+    }
 </style>
 
 
 <div class="page-view-container flex-column">
-    <div class="notes flex-row">
+    <div class="page-view-header flex-row">
         <OpenFolder scope="Page"></OpenFolder>
         <div class="flex-row">
             {#await $seriesTree then response}
                 {#if 
                     $currentPage > response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages[0].id
                 }
-                <a class="nav-button" href="#previous-page" on:click={() => previousPage(response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages)}>{"<"}</a>
+                    <a class="nav-button" href="#previous-page" on:click={() => previousPage(response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages)}>{"<"}</a>
+                {:else}
+                    <a class="nav-button" href="#no-previous-page" disabled>{"<"}</a> 
                 {/if}
                 <div class="flex-row">
                     <p>Page</p>
@@ -238,7 +253,9 @@
                         ].id
                     )
                 }
-                <a class="nav-button" href="#next-page" on:click={() => nextPage(response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages)}>{">"}</a>
+                    <a class="nav-button" href="#next-page" on:click={() => nextPage(response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages)}>{">"}</a>
+                {:else}
+                    <a class="nav-button" href="#no-next-page" disabled>{">"}</a>
                 {/if}
             {/await}
         </div>
@@ -250,8 +267,9 @@
     <div class="page-view-contents flex-row">
         <div class="dialogue-boxes">
             <div class="dialogue-header flex-row">
-                <h2>Dialogue Selection</h2>
-                <FancyButton value="Add" on:click={addDialogue}/>
+                <span class="dialogue-selection-title">Dialogue Selection</span>
+                <!-- <FancyButton value="Add" on:click={addDialogue}/> -->
+                <IconButton icon="add_box" title="Add Dialogue" on:click={addDialogue}/>
             </div>
             <div class="dialogue-box-selection flex-column">
                 {#each dialogueList as dialogue, index}
@@ -280,17 +298,19 @@
                         Raw
                     </option>
                 </FancySelect>
-                <FancyFile on:upload={uploadImage} icon={true} value="Change Image"/>
-                <IconButton
-                    title={showDialogue ? "Hide Dialogue" : "Show Dialogue"}
-                    on:click={() => showDialogue = !showDialogue}
-                    icon={showDialogue ? "speaker_notes" : "speaker_notes_off"}
-                />
-                <IconButton
-                    title="Expand Page Image"
-                    on:click={() => showImageModal = !showImageModal}
-                    icon="aspect_ratio"
-                />
+                <div class="flex-row">
+                    <FancyFile on:upload={uploadImage} icon={true} value="Change Image"/>
+                    <IconButton
+                        title={showDialogue ? "Hide Dialogue" : "Show Dialogue"}
+                        on:click={() => showDialogue = !showDialogue}
+                        icon={showDialogue ? "speaker_notes" : "speaker_notes_off"}
+                    />
+                    <IconButton
+                        title="Expand Page Image"
+                        on:click={() => showImageModal = !showImageModal}
+                        icon="aspect_ratio"
+                    />
+                </div>
             </div>
             <div class="undo-flex" style="--width: {pageWidth}px; --height: {pageWidth * 1.4}px;">
                 <div

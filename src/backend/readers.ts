@@ -21,7 +21,7 @@ let exportFolder = join(resolve("."), "Series");
 
 export const updateReaderExportFolder = (newFolder: string) => {
   exportFolder = newFolder;
-}
+};
 
 export const getSeries = () => {
   const configs: ISeriesConfig[] = [];
@@ -30,7 +30,11 @@ export const getSeries = () => {
     return configs;
   }
   const dirs: string[] = readdirSync(exportFolder, { withFileTypes: true })
-    .filter((file: Dirent) => file.isDirectory())
+    .filter(
+      (file: Dirent) =>
+        file.isDirectory() &&
+        existsSync(join(exportFolder, file.name, "config.json"))
+    )
     .map((dir: Dirent) => dir.name);
   dirs.forEach(dir => {
     const volumes = readdirSync(join(exportFolder, dir), {
@@ -41,7 +45,9 @@ export const getSeries = () => {
     let chapters = 0;
     volumes.forEach(volume => {
       readdirSync(join(exportFolder, dir, volume), { withFileTypes: true })
-        .filter((file: Dirent) => file.isDirectory())
+        .filter(
+          (file: Dirent) => file.isDirectory() && file.name.includes("Volume")
+        )
         .forEach(() => (chapters += 1));
     });
     const cover = readdirSync(join(exportFolder, dir), { withFileTypes: true })
@@ -245,4 +251,4 @@ export const openFolder = (data: {
 
 export const getExportFolder = () => {
   return exportFolder;
-}
+};

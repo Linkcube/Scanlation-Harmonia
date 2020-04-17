@@ -1,12 +1,27 @@
 <script>
+    import { onMount } from 'svelte';
     export let value;
     export let label = "";
 
     let width = 120;
+    let selectEl;
 
     function updateSize() {
-        if (label.length === 0) {
-            width = 40 + (10 * JSON.stringify(value).length);
+        if (selectEl && selectEl.selectedOptions.length > 0) {
+            let textLen = selectEl.selectedOptions[0].label.length;
+            if (label.length === 0) {
+                width = 40 + (10 * textLen);
+            } else if (label.length < textLen) {
+                width = 10 * textLen;
+            } else {
+                width = 120;
+            }
+        } else {
+            if (label.length === 0) {
+                width = 40 + (10 * JSON.stringify(value).length);
+            } else if (label.length > 12) {
+                width = 10 * label.length;
+            }
         }
     }
 
@@ -19,7 +34,7 @@
         }
     }
 
-    updateSize();
+    onMount(updateSize);
 </script>
 
 <style>
@@ -124,7 +139,7 @@
 
 <div class="form-field">
     <div class="form-field-control">
-        <select bind:value={value} use:scale={value} on:blur on:change on:input style="--width: {width}px;">
+        <select bind:this={selectEl} bind:value={value} use:scale={value} on:blur on:change on:input style="--width: {width}px;">
             <slot></slot>
         </select>
         <label class="float-text">{label}</label>

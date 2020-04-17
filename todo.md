@@ -60,10 +60,10 @@ x Hopefully remove the save button all-together
 ## Testing notes
 x Allow for hitting enter in text fields to = clicking the related button (i.e. add series)
 - Allow for right clicking on the series list to delete objects
-- Allow for centering/better layout
-- View all items if possible
+~ Allow for centering/better layout
+~ View all items if possible
     + Probably move selected dialogue beneath dialogue selection, and have dialogue table scroll
-~ Make the dialogue scaling more noticable (corner icons)
+x Make the dialogue scaling more noticable (corner icons)
 - Maybe foreward/backward browser actions
 x Page to page navigation
     + Click on Page # header and have it have dropdown of other pages
@@ -72,8 +72,8 @@ x Create vol/chapter/page 1 on series creation
 
 ## Icons
 x Convert to icons to save space
-- Style to make better use of icons
+x Style to make better use of icons
 
 ## Changeable export folder
 x Allow the user to change the folder
-- Verify contents before displaying (config.json)
+~ Verify contents before displaying (config.json)

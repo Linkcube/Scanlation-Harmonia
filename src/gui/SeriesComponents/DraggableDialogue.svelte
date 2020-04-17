@@ -195,28 +195,32 @@
     }
 
     .scale {
-        border: 3px groove goldenrod;
+        /* border: 3px groove goldenrod; */
         position: absolute;
         width: 15px;
         height: 15px;
+        color: goldenrod;
     }
 
     .top-left {
         top: 0px;
         left: 0px;
         cursor: nw-resize;
+        rotate: 180deg;
     }
 
     .top-right {
         top: 0px;
         right: 0px;
         cursor: ne-resize;
+        rotate: 270deg;
     }
 
     .bottom-left {
         bottom: 0px;
         left: 0px;
         cursor: sw-resize;
+        rotate: 90deg;
     }
 
     .bottom-right {
@@ -235,9 +239,9 @@
     style="--w: {dialogueW}px; --h: {dialogueH}px; --x: {relativeX}px; --y: {relativeY}px"
 >
     {#if clickedDialogue}
-        <div on:mousedown={startScale} class="top-left scale material-icons"></div>
-        <div on:mousedown={startScale} class="top-right scale material-icons"></div>
-        <div on:mousedown={startScale} class="bottom-left scale material-icons"></div>
-        <div on:mousedown={startScale} class="bottom-right scale material-icons"></div>
+        <div on:mousedown={startScale} class="top-left scale material-icons">signal_cellular_4_bar</div>
+        <div on:mousedown={startScale} class="top-right scale material-icons">signal_cellular_4_bar</div>
+        <div on:mousedown={startScale} class="bottom-left scale material-icons">signal_cellular_4_bar</div>
+        <div on:mousedown={startScale} class="bottom-right scale material-icons">signal_cellular_4_bar</div>
     {/if}
 </div>

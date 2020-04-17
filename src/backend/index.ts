@@ -40,14 +40,14 @@ import { existsSync, mkdirSync, mkdir } from "fs";
 
 let exportFolder = join(resolve("."), "Series");
 
-const setExportFolder = (data: {newFolder: string}) => {
+const setExportFolder = (data: { newFolder: string }) => {
   let parsedPath: string;
   if (data.newFolder === "") {
     parsedPath = format(parse("."));
   } else {
     parsedPath = format(parse(data.newFolder));
   }
-  mkdir(parsedPath, (err) => {
+  mkdir(parsedPath, err => {
     if (err && err.code !== "EEXIST") {
       console.log(err);
       return "Failed";
@@ -58,7 +58,7 @@ const setExportFolder = (data: {newFolder: string}) => {
     updateWriterExportFolder(parsedPath);
     return "Done";
   });
-}
+};
 
 const cors = require("cors");
 let app: any;
@@ -181,7 +181,6 @@ function startService() {
     const image = req.files.image;
     const seriesPath = join(exportFolder, JSON.parse(req.body.series));
     const coverPath = join(seriesPath, "cover" + extname(image.name));
-    console.log(coverPath);
 
     cleanPreviousSeriesImage(seriesPath);
 
