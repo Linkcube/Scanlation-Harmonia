@@ -1,6 +1,8 @@
 <script>
     import { viewMode, currentVolume, currentChapter, currentPage, currentSeries, seriesTree, fetchPageData, currentDialogue, pageData } from '../store.js'
     import TableItem from './TableItem.svelte';
+    import FancyTable from '../shared/FancyTable.svelte';
+    import FancyTableRow from '../shared/FancyTableRow.svelte';
 
     function selectItem(item) {
         if (item.hasOwnProperty('page')) {
@@ -54,32 +56,47 @@
     }
 </style>
 
-
 <div class="table-container">
-    <TableItem id={$currentSeries} itemType="series" on:click={() => selectItem({})}></TableItem>
-    <div class="scrolling">
-        {#each seriesData as volume}
-            <TableItem
-                id={volume.id}
-                itemType="volume" 
-                title={volume.title}
-                on:click={() => selectItem({ volume: volume.id })}
-            ></TableItem>
-            {#each volume.chapters as chapter}
-                <TableItem
-                    id={chapter.id}
-                    itemType="chapter"
-                    title={chapter.title}
-                    on:click={() => selectItem({ volume: volume.id, chapter: chapter.id, title: chapter.title })}
-                ></TableItem>
-                {#each chapter.pages as page, index}
-                    <TableItem
-                        id={page.id}
-                        itemType="page"
-                        on:click={() => selectItem({ volume: volume.id, chapter: chapter.id, page: page.id, title: chapter.title })}
-                    ></TableItem>
-                {/each}
-            {/each}
-        {/each}
+<FancyTable items={seriesData} columnSizes={["100%"]}>
+    <div slot="header">
+        <FancyTableRow
+            values={[$currentSeries]}
+            on:click={() => selectItem({})}
+            type="click header"
+        />
     </div>
+    <div slot="item" let:item={volume} let:index={volumeIndex}>
+        <FancyTableRow
+            values={[`Volume ${volumeIndex+1}`]}
+            on:click={() => selectItem({ volume: volume.id })}
+            type="click row expand"
+        >
+            <div slot="children">
+                <FancyTable items={volume.chapters} columnSizes={["90%"]}>
+                    <div slot="item" let:item={chapter} let:index={chapterIndex}>
+                        <FancyTableRow
+                            values={[`Chapter ${chapterIndex+1}`]}
+                            on:click={() => selectItem({ volume: volume.id, chapter: chapter.id, title: chapter.title })}
+                            type="click row expand"
+                            depth=1
+                        >
+                            <div slot="children">
+                                <FancyTable items={chapter.pages} columnSizes={["100%"]}>
+                                    <div slot="item" let:item={page} let:index={pageIndex}>
+                                        <FancyTableRow
+                                            values={[`Page ${pageIndex+1}`]}
+                                            on:click={() => selectItem({ volume: volume.id, chapter: chapter.id, page: page.id, title: chapter.title })}
+                                            type="click row"
+                                            depth=5
+                                        />
+                                    </div>
+                                </FancyTable>
+                            </div>
+                        </FancyTableRow>
+                    </div>
+                </FancyTable>
+            </div>
+        </FancyTableRow>
+    </div>
+</FancyTable>
 </div>

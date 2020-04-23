@@ -77,3 +77,13 @@ x Style to make better use of icons
 ## Changeable export folder
 x Allow the user to change the folder
 ~ Verify contents before displaying (config.json)
+
+## Redesign backend
+- Differentiate titles and actual file names
+- Allow for changnig a volume/chapter/page #
+- Be able to set a full series/volume/chapter name
+- Make sure everything is safe for fs use from user inputs
+- Combine queries/mutations to reduce endpoints
+- change which data is sent in preview/full
+    + make it more efficeint
+    + If components allow for more data to be previewed then include it

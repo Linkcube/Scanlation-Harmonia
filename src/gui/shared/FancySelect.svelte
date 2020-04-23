@@ -3,7 +3,7 @@
     export let value;
     export let label = "";
 
-    let width = 120;
+    let width = 140;
     let selectEl;
 
     function updateSize() {
@@ -14,7 +14,7 @@
             } else if (label.length < textLen) {
                 width = 10 * textLen;
             } else {
-                width = 120;
+                width = 140;
             }
         } else {
             if (label.length === 0) {

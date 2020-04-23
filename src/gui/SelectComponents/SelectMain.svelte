@@ -96,6 +96,11 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+
+    .row {
+        width: 100%;
+        display: flex;
+    }
 </style>
 
 <main>

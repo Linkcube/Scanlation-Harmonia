@@ -8,13 +8,14 @@ type Query {
     page(series: String!, volume: String!, chapter: String!, page: String!): pageData
     pageDialogue(series: String!, volume: String!, chapter: String!, page: String!, dialogue: Int!): dialogueObject
     getStyles(series: String!): [styleObject]
+    getLanguages(series: String!): [styleObject]
     openFolder(series: String!, volume: String, chapter: String, page: String): String
     getExportFolder: String
 },
 type Mutation {
     addDialogue(series: String!, volume: String!, chapter: String!, page: String!): String
     saveDialogue(series: String!, volume: String!, chapter: String!, page: String!,
-        index: Int!, title: String!, style: Int!, raw: String!, translated: String!,
+        index: Int!, title: String!, style: Int!, raw: String!, translated: [String]!,
         bubble: dialogueBubbleInput!): String
     deleteDialogue(series: String!, volume: String!, chapter: String!, page: String!, index: Int!): String
     addPage(series: String!, volume: String!, chapter: String!): String
@@ -29,6 +30,9 @@ type Mutation {
     addStyle(series: String!): String
     editStyle(series: String!, index: Int!, title: String!, attributes: String!): String
     deleteStyle(series: String!, index: Int!): String
+    addLanguage(series: String!): String
+    editLanguage(series: String!, index: Int!, title: String!, attributes: String!): String
+    deleteLanguage(series: String!, index: Int!): String
     setExportFolder(newFolder: String!): String
 },
 type seriesObject {
@@ -86,7 +90,7 @@ type dialogueObject {
     title: String
     style: Int
     raw: String
-    translated: String
+    translated: [String]
 },
 type styleObject {
     title: String

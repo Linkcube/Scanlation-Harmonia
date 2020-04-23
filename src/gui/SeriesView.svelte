@@ -25,10 +25,10 @@
         background: white;
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
-        margin-left: 300px;
+        justify-content: space-between;
+        margin-left: 200px;
         position: fixed;
-        width: calc(100% - 300px);
+        width: calc(100% - 200px);
         transition-duration: 400ms;
         padding-top: 5px;
         z-index: 1;

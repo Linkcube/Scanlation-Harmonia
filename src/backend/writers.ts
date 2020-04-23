@@ -33,7 +33,7 @@ export const addDialogue = (data: {
     title: `Dialogue ${dialogue.length + 1}`,
     style: 0,
     raw: "",
-    translated: "",
+    translated: [""],
     bubble: {
       x: 0,
       y: 0,
@@ -54,7 +54,7 @@ export const saveDialogue = (data: {
   title: string;
   style: number;
   raw: string;
-  translated: string;
+  translated: string[];
   bubble: IDialogueBubble;
 }) => {
   const pagePath = join(data.series, data.volume, data.chapter, data.page);
@@ -145,6 +145,9 @@ export const addSeries = (data: { series: string }) => {
     mkdirSync(join(seriesPath, "Volume 1", "Chapter 1"));
     mkdirSync(join(seriesPath, "Volume 1", "Chapter 1", "Page 1"));
   }
+  addStyle(data);
+  addLanguage(data);
+  saveNotes({ series: data.series, notes: ""});
   return "Done";
 };
 
@@ -261,6 +264,44 @@ export const deleteStyle = (data: { series: string; index: number }) => {
     styles = JSON.parse(readFileSync(stylePath, "utf-8"));
     styles.splice(data.index, 1);
     writeFileSync(stylePath, JSON.stringify(styles));
+  }
+  return "Done";
+};
+
+export const addLanguage = (data: { series: string }) => {
+  const languagePath = join(exportFolder, data.series, "languages.json");
+  let languages: IStyle[] = [];
+  if (existsSync(languagePath)) {
+    languages = JSON.parse(readFileSync(languagePath, "utf-8"));
+  }
+  languages.push({ title: "New Language", attributes: "" });
+  writeFileSync(languagePath, JSON.stringify(languages));
+  return "Done";
+};
+
+export const editLanguage = (data: {
+  series: string;
+  index: number;
+  title: string;
+  attributes: string;
+}) => {
+  const languagePath = join(exportFolder, data.series, "languages.json");
+  let languages: IStyle[] = [];
+  if (existsSync(languagePath)) {
+    languages = JSON.parse(readFileSync(languagePath, "utf-8"));
+  }
+  languages[data.index] = { title: data.title, attributes: data.attributes };
+  writeFileSync(languagePath, JSON.stringify(languages));
+  return "Done";
+};
+
+export const deleteLanguage = (data: { series: string; index: number }) => {
+  const languagePath = join(exportFolder, data.series, "languages.json");
+  let languages: IStyle[] = [];
+  if (existsSync(languagePath)) {
+    languages = JSON.parse(readFileSync(languagePath, "utf-8"));
+    languages.splice(data.index, 1);
+    writeFileSync(languagePath, JSON.stringify(languages));
   }
   return "Done";
 };

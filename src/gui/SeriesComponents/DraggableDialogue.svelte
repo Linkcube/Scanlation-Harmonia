@@ -206,21 +206,21 @@
         top: 0px;
         left: 0px;
         cursor: nw-resize;
-        rotate: 180deg;
+        transform: rotate(180deg);
     }
 
     .top-right {
         top: 0px;
         right: 0px;
         cursor: ne-resize;
-        rotate: 270deg;
+        transform: rotate(270deg);
     }
 
     .bottom-left {
         bottom: 0px;
         left: 0px;
         cursor: sw-resize;
-        rotate: 90deg;
+        transform: rotate(90deg);
     }
 
     .bottom-right {

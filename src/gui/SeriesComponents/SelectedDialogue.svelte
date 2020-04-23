@@ -1,6 +1,6 @@
 <script>
     import { pageDialogue, fetchSaveDialogue, currentSeries, currentVolume, currentChapter,currentPage,
-    currentDialogue, fetchDeleteDialogue, fetchPageData, dialogueBubble, seriesStyles } from '../store.js';
+    currentDialogue, fetchDeleteDialogue, fetchPageData, dialogueBubble, seriesStyles, seriesLanguages } from '../store.js';
     import Modal from '../shared/Modal.svelte';
     import IconButton from '../shared/IconButton.svelte';
     import FancyInput from '../shared/FancyInput.svelte';
@@ -11,15 +11,25 @@
         title: '',
         style: '',
         raw: '',
-        translated: ''
+        translated: [''],
+        language: 0
     };
     let styleList = [];
+    let languageList = [];
     let showModal = false;
 
     seriesStyles.subscribe((stylePromise) => {
         Promise.resolve(stylePromise).then((response) => {
             if (response.hasOwnProperty('data')) {
                 styleList = response.data.getStyles;
+            }
+        });
+    });
+
+    seriesLanguages.subscribe((languagePromise) => {
+        Promise.resolve(languagePromise).then((response) => {
+            if (response.hasOwnProperty('data')) {
+                languageList = response.data.getLanguages;
             }
         });
     });
@@ -32,6 +42,10 @@
                 config.style = dialogue.style;
                 config.raw = dialogue.raw;
                 config.translated = dialogue.translated;
+                if (!Array.isArray(config.translated)) {
+                    if (config.translated !== null) config.translated = [config.translated];
+                    else config.translated = [""];
+                }
             }
         });
     });
@@ -85,10 +99,12 @@
         flex-wrap: wrap;
     }
 
-    .style-selection {
+    .styled-selection {
         display: inline-flex;
-        margin-top: auto;
+        margin-top: 10px;
         margin-bottom: auto;
+        margin-right: 5px;
+        margin-left: 5px;
     }
 
     .dialogue-settings {
@@ -103,18 +119,39 @@
     <div class="selected-dialogue">
         <div class="dialogue-settings">
             <FancyInput bind:value={config.title} label="Dialogue Title" on:blur={save}/>
-            <div class="style-selection">
+            <div class="styled-selection">
                 <FancySelect bind:value={config.style} on:blur={save} label="Dialogue Style">
                     {#each styleList as style, index}
                         <option value={index}>{style.title}</option>
                     {/each}
                 </FancySelect>
             </div>
+            <div class="styled-selection">
+                <FancySelect bind:value={config.language} on:blur={save} label="Languge">
+                    {#each languageList as language, index}
+                        <option value={index}>{language.title}</option>
+                    {/each}
+                </FancySelect>
+            </div>
             <IconButton icon="delete_forever" title="Delete Dialogue" type="warn" on:click={() => showModal = true}/>
         </div>
         <div class="center-text">
-            <FancyTextArea label="Raw Text" bind:value={config.raw} on:blur={save} height=200 width=270 resize="none"/>
-            <FancyTextArea label="Translated Text" bind:value={config.translated} on:blur={save} height=200 width=270 resize="none"/>
+            <FancyTextArea
+                label="Raw Text"
+                bind:value={config.raw}
+                on:blur={save}
+                height=200
+                width=270
+                resize="none"
+            />
+            <FancyTextArea
+                label="Translated Text"
+                bind:value={config.translated[config.language]}
+                on:blur={save}
+                height=200
+                width=270
+                resize="none"
+            />
         </div>
     </div>
 {/if}

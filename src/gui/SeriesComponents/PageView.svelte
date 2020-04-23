@@ -15,6 +15,8 @@
     import FancySelect from '../shared/FancySelect.svelte';
     import FancyFile from '../shared/FancyFile.svelte';
     import IconButton from '../shared/IconButton.svelte';
+    import FancyTable from '../shared/FancyTable.svelte';
+    import FancyTableRow from '../shared/FancyTableRow.svelte';
 
     let selectedImage = "raw";
     let imageContainer;
@@ -260,26 +262,22 @@
             {/await}
         </div>
         <IconButton icon="delete_forever" title="Delete Page" type="warn" on:click={() => showModal = true}/>
-    </div>    
-    <!-- <div class="flex-row page-scaler">
-        <input type=range bind:value={pageWidth} min="550" max="1000">
-    </div> -->
+    </div>
     <div class="page-view-contents flex-row">
         <div class="dialogue-boxes">
             <div class="dialogue-header flex-row">
                 <span class="dialogue-selection-title">Dialogue Selection</span>
-                <!-- <FancyButton value="Add" on:click={addDialogue}/> -->
                 <IconButton icon="add_box" title="Add Dialogue" on:click={addDialogue}/>
             </div>
-            <div class="dialogue-box-selection flex-column">
-                {#each dialogueList as dialogue, index}
-                    <TableItem 
-                        itemType=""
-                        id={dialogue.title}
+            <FancyTable items={dialogueList} columnSizes={["10%", "90%"]} height="250px">
+                <div class="row" slot="item" let:item let:index>
+                    <FancyTableRow
+                        type="click row"
+                        values={[`${index + 1}.`, item.title]}
                         on:click={() => selectDialogue(index)}
-                    ></TableItem>
-                {/each}
-            </div>
+                    />
+                </div>
+            </FancyTable>
             <SelectedDialogue bind:this={selectedDialogue}></SelectedDialogue>
         </div>
         <div class="page-display-container flex-column">

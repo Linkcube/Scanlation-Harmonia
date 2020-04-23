@@ -1,5 +1,5 @@
 import {
-    writable
+    writable, get
 } from 'svelte/store';
 import fetchGraphQL from 'fetch-graphql';
 
@@ -17,6 +17,13 @@ export const pageDialogue = writable({});
 export const currentDialogue = writable(-1);
 export const dialogueBubble = writable({});
 export const seriesStyles = writable([]);
+export const seriesLanguages = writable([]);
+const uuid = writable(0);
+
+export function getUUID() {
+    uuid.update(n => n + 1);
+    return get(uuid);
+}
 
 export const graphqlBase = 'http://localhost:4000';
 
@@ -84,7 +91,12 @@ mutation {
 
 const saveDialogueMutation = (series, volume, chapter, page, index, title, style, raw, translated, bubble) => `
 mutation {
-    saveDialogue(series: "${series}", volume: "Volume ${volume}", chapter: "Chapter ${chapter}", page: "Page ${page}", index: ${index}, title: "${title}", style: ${style}, raw: """${raw}""", translated: """${translated}""", bubble: {x: ${bubble.x}, y: ${bubble.y}, width: ${bubble.width}, height: ${bubble.height}})
+    saveDialogue(
+        series: "${series}", volume: "Volume ${volume}", chapter: "Chapter ${chapter}",
+        page: "Page ${page}", index: ${index}, title: "${title}", style: ${style}, raw: """${raw}""",
+        translated: ${JSON.stringify(translated)}, bubble: {x: ${bubble.x}, y: ${bubble.y},
+        width: ${bubble.width}, height: ${bubble.height}}
+    )
 }`;
 
 const deleteDialogueMutation = (series, volume, chapter, page, index) => `
@@ -147,12 +159,35 @@ mutation {
 
 const editStyleMutation = (series, index, title, attributes) => `
 mutation {
-    editStyle(series: "${series}", index: ${index}, title: "${title}", attributes: "${attributes}")
+    editStyle(series: "${series}", index: ${index}, title: "${title}", attributes: """${attributes}""")
 }`;
 
 const deleteStyleMutation = (series, index) => `
 mutation {
     deleteStyle(series: "${series}", index: ${index})
+}`
+
+const getLanguagesQuery = (series) => `
+query {
+    getLanguages(series: "${series}") {
+        title,
+        attributes
+      }
+}`;
+
+const addLanguageMutation = (series) => `
+mutation {
+    addLanguage(series: "${series}")
+}`;
+
+const editLanguageMutation = (series, index, title, attributes) => `
+mutation {
+    editLanguage(series: "${series}", index: ${index}, title: "${title}", attributes: """${attributes}""")
+}`;
+
+const deleteLanguageMutation = (series, index) => `
+mutation {
+    deleteLanguage(series: "${series}", index: ${index})
 }`
 
 const openFolderQuery = (series, volume, chapter, page) => {
@@ -366,6 +401,34 @@ export function fetchDeleteStyle(series, index) {
     return fetchGraphQL(
         graphqlUrl, {},
         deleteStyleMutation(series, index)
+    );
+}
+
+export function fetchGetLanguages(series) {
+    seriesLanguages.set(fetchGraphQL(
+        graphqlUrl, {},
+        getLanguagesQuery(series)
+    ));
+}
+
+export function fetchAddLanguage(series) {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        addLanguageMutation(series)
+    );
+}
+
+export function fetchEditLanguage(series, index, title, attributes) {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        editLanguageMutation(series, index, title, attributes)
+    );
+}
+
+export function fetchDeleteLanguage(series, index) {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        deleteLanguageMutation(series, index)
     );
 }
 

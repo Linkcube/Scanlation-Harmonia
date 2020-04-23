@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import TableItem from './TableItem.svelte';
     import Modal from '../shared/Modal.svelte';
-    import { fetchGetStyles, fetchAddStyle, fetchEditStyle, currentSeries, seriesStyles, fetchDeleteStyle } from '../store.js';
+    import { fetchGetLanguages, fetchAddLanguage, fetchEditLanguage, currentSeries, seriesLanguages, fetchDeleteLanguage } from '../store.js';
     import FancyButton from '../shared/FancyButton.svelte';
     import IconButton from '../shared/IconButton.svelte';
     import FancyInput from '../shared/FancyInput.svelte';
@@ -12,44 +12,44 @@
 
     let openNew = false;
 
-    function selectStyle(index) {
-        styleTitle = styleList[index].title;
-        styleAttributes = styleList[index].attributes;
-        styleIndex = index;
+    function selectLanguage(index) {
+        languageTitle = languageList[index].title;
+        languageAttributes = languageList[index].attributes;
+        languageIndex = index;
         showModal = true;
     }
 
-    function addStyle() {
-        fetchAddStyle($currentSeries).then(fetchGetStyles($currentSeries));
+    function addLanguage() {
+        fetchAddLanguage($currentSeries).then(fetchGetLanguages($currentSeries));
         openNew = true;
     }
 
     function submit() {
-        fetchEditStyle($currentSeries, styleIndex, styleTitle, styleAttributes).then(fetchGetStyles($currentSeries));
+        fetchEditLanguage($currentSeries, languageIndex, languageTitle, languageAttributes).then(fetchGetLanguages($currentSeries));
     }
 
-    function deleteStyle() {
-        fetchDeleteStyle($currentSeries, styleIndex).then(fetchGetStyles($currentSeries));
+    function deleteLanguage() {
+        fetchDeleteLanguage($currentSeries, languageIndex).then(fetchGetLanguages($currentSeries));
         showModal = false;
     }
 
-    let styleList = [];
+    let languageList = [];
 
-    let styleTitle = "";
-    let styleAttributes = "";
-    let styleIndex = 0;
+    let languageTitle = "";
+    let languageAttributes = "";
+    let languageIndex = 0;
     let showModal = false;
 
     onMount(() => {
-        fetchGetStyles($currentSeries);
+        fetchGetLanguages($currentSeries);
     });
 
-    seriesStyles.subscribe((stylePromise) => {
-        Promise.resolve(stylePromise).then((response) => {
+    seriesLanguages.subscribe((languagePromise) => {
+        Promise.resolve(languagePromise).then((response) => {
             if (response.hasOwnProperty('data')) {
-                styleList = response.data.getStyles;
+                languageList = response.data.getLanguages;
                 if (openNew) {
-                    selectStyle(styleList.length - 1);
+                    selectLanguage(languageList.length - 1);
                     openNew = false;
                 }
             }
@@ -60,14 +60,14 @@
 </script>
 
 <style>
-    .style-container {
+    .language-container {
         display: flex;
         flex-direction: column;
         width: 40%;
         min-width: 550px;
         margin-bottom: 20px;
     }
-    .style-header {
+    .language-header {
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
@@ -92,20 +92,20 @@
     }
 </style>
 
-<div class="style-container">
-    <div class="style-header">
-        <span>Style Configuration</span>
-        <IconButton icon="add_box" title="Add Style" on:click={addStyle}/>
+<div class="language-container">
+    <div class="language-header">
+        <span>Languages</span>
+        <IconButton icon="add_box" title="Add language" on:click={addLanguage}/>
     </div>
-    <FancyTable items={styleList} columnSizes={["10%", "40%", "60%"]} height="500px">
+    <FancyTable items={languageList} columnSizes={["10%", "40%", "60%"]} height="500px">
         <div slot="header">
-            <FancyTableRow values={["#", "Name", "Style"]} type="header"/>
+            <FancyTableRow values={["#", "Language", "Notes"]} type="header"/>
         </div>
         <div slot="item" let:item let:index>
             <FancyTableRow
                 values={[`${index + 1}.`, item.title, item.attributes]}
                 type="click row"
-                on:click={() => selectStyle(index)}
+                on:click={() => selectLanguage(index)}
             />
         </div>
     </FancyTable>
@@ -114,11 +114,13 @@
 {#if showModal}
     <Modal on:close={() => showModal = false} on:submission={submit}>
         <div class="top-row">
-            <FancyInput label="Style Title" bind:value={styleTitle}/>
-            <IconButton icon="delete_forever" title="Delete Style" type="warn" on:click={deleteStyle}/>
+            <FancyInput label="Language" bind:value={languageTitle}/>
+            {#if languageIndex > 0}
+                <IconButton icon="delete_forever" title="Delete Language" type="warn" on:click={deleteLanguage}/>
+            {/if}
         </div>
         <div class="bottom-row">
-            <FancyTextArea label="Style Attributes" bind:value={styleAttributes} width=500 resize="vertical"/>
+            <FancyTextArea label="Language Notes" bind:value={languageAttributes} width=500 resize="vertical"/>
         </div>
     </Modal>
 {/if}

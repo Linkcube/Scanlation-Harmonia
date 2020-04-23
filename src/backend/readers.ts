@@ -229,6 +229,15 @@ export const getStyles = (data: { series: string }) => {
   return styles;
 };
 
+export const getLanguages = (data: { series: string }) => {
+  const languagePath = join(exportFolder, data.series, "languages.json");
+  let languages: IStyle[] = [];
+  if (existsSync(languagePath)) {
+    languages = JSON.parse(readFileSync(languagePath, "utf-8"));
+  }
+  return languages;
+};
+
 export const openFolder = (data: {
   series: string;
   volume?: string;

@@ -2,6 +2,7 @@
     import { currentSeries, currentVolume, currentChapter, currentPage, fetchAddVolume, pageMode, fetchSeriesTree, fetchDeleteSeries } from '../store.js';
     import NoteView from './NoteView.svelte';
     import StyleTable from './StyleTable.svelte';
+    import LanguageTable from './LanguageTable.svelte';
     import Modal from '../shared/Modal.svelte';
     import OpenFolder from './OpenFolder.svelte';
     import FancyButton from '../shared/FancyButton.svelte';
@@ -45,6 +46,13 @@
         display: flex;
         flex-direction: row;
     }
+
+    .tables-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
 </style>
 
 
@@ -57,7 +65,10 @@
         </div>
         <IconButton icon="delete_forever" title="Delete Series" type="warn" on:click={() => showModal = true}/>
     </div>
-    <StyleTable></StyleTable>
+    <div class="tables-container">
+        <StyleTable/>
+        <LanguageTable/>
+    </div>
     <NoteView scope="Series"></NoteView>
 </div>
 

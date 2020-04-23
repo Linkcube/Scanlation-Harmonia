@@ -14,7 +14,8 @@ import {
   getStyles,
   openFolder,
   updateReaderExportFolder,
-  getExportFolder
+  getExportFolder,
+  getLanguages
 } from "./readers";
 import {
   addDialogue,
@@ -34,7 +35,10 @@ import {
   deleteStyle,
   cleanPreviousPageImage,
   cleanPreviousSeriesImage,
-  updateWriterExportFolder
+  updateWriterExportFolder,
+  addLanguage,
+  editLanguage,
+  deleteLanguage
 } from "./writers";
 import { existsSync, mkdirSync, mkdir } from "fs";
 
@@ -87,7 +91,11 @@ const root = {
   deleteStyle,
   openFolder,
   getExportFolder,
-  setExportFolder
+  setExportFolder,
+  getLanguages,
+  addLanguage,
+  editLanguage,
+  deleteLanguage
 };
 
 function print(msg: string) {

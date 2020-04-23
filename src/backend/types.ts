@@ -33,7 +33,7 @@ export interface IDialogueData {
   title: string;
   style: number;
   raw: string;
-  translated: string;
+  translated: string[];
   bubble: IDialogueBubble;
 }
 
