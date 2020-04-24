@@ -1,6 +1,4 @@
 <script>
-    import ChapterSelect from './SeriesComponents/ChapterSelect.svelte';
-    import PageSelect from './SeriesComponents/PageSelect.svelte';
     import PageView from './SeriesComponents/PageView.svelte';
     import ChapterConfig from './SeriesComponents/ChapterConfig.svelte';
     import VolumeConfig from './SeriesComponents/VolumeConfig.svelte';

@@ -1,6 +1,8 @@
 <script>
-    import { viewMode, currentVolume, currentChapter, currentPage, currentSeries, seriesTree, fetchPageData, currentDialogue, pageData } from '../store.js'
-    import TableItem from './TableItem.svelte';
+    import {
+        viewMode, currentVolume, currentChapter, currentPage, currentSeries,
+        seriesTree, fetchPageData, currentDialogue, pageData
+    } from '../store.js'
     import FancyTable from '../shared/FancyTable.svelte';
     import FancyTableRow from '../shared/FancyTableRow.svelte';
 
@@ -15,7 +17,7 @@
             currentPage.set(item.page);
             pageData.set(Promise.resolve({data: {page: {dialogue: [], sources: []}}}));
             $currentDialogue = -1;
-            fetchPageData($currentSeries, item.volume, item.chapter, item.page);
+            fetchPageData();
         } else if (item.hasOwnProperty('chapter')) {
             viewMode.set("chapter");
             currentChapter.set({
@@ -47,12 +49,6 @@
         display: flex;
         flex-direction: column;
         overflow-y: auto;
-    }
-
-    .scrolling {
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
     }
 </style>
 

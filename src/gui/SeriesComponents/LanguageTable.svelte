@@ -1,8 +1,10 @@
 <script>
     import { onMount } from 'svelte';
-    import TableItem from './TableItem.svelte';
     import Modal from '../shared/Modal.svelte';
-    import { fetchGetLanguages, fetchAddLanguage, fetchEditLanguage, currentSeries, seriesLanguages, fetchDeleteLanguage } from '../store.js';
+    import {
+        fetchGetLanguages, fetchAddLanguage, fetchEditLanguage,
+        seriesLanguages, fetchDeleteLanguage
+    } from '../store.js';
     import FancyButton from '../shared/FancyButton.svelte';
     import IconButton from '../shared/IconButton.svelte';
     import FancyInput from '../shared/FancyInput.svelte';
@@ -20,16 +22,16 @@
     }
 
     function addLanguage() {
-        fetchAddLanguage($currentSeries).then(fetchGetLanguages($currentSeries));
+        fetchAddLanguage().then(fetchGetLanguages());
         openNew = true;
     }
 
     function submit() {
-        fetchEditLanguage($currentSeries, languageIndex, languageTitle, languageAttributes).then(fetchGetLanguages($currentSeries));
+        fetchEditLanguage(languageIndex, languageTitle, languageAttributes).then(fetchGetLanguages());
     }
 
     function deleteLanguage() {
-        fetchDeleteLanguage($currentSeries, languageIndex).then(fetchGetLanguages($currentSeries));
+        fetchDeleteLanguage(languageIndex).then(fetchGetLanguages());
         showModal = false;
     }
 
@@ -40,9 +42,7 @@
     let languageIndex = 0;
     let showModal = false;
 
-    onMount(() => {
-        fetchGetLanguages($currentSeries);
-    });
+    onMount(() => fetchGetLanguages());
 
     seriesLanguages.subscribe((languagePromise) => {
         Promise.resolve(languagePromise).then((response) => {

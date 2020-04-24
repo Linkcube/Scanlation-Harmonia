@@ -1,8 +1,10 @@
 <script>
     import { onMount } from 'svelte';
-    import TableItem from './TableItem.svelte';
     import Modal from '../shared/Modal.svelte';
-    import { fetchGetStyles, fetchAddStyle, fetchEditStyle, currentSeries, seriesStyles, fetchDeleteStyle } from '../store.js';
+    import {
+        fetchGetStyles, fetchAddStyle, fetchEditStyle, currentSeries,
+        seriesStyles, fetchDeleteStyle
+    } from '../store.js';
     import FancyButton from '../shared/FancyButton.svelte';
     import IconButton from '../shared/IconButton.svelte';
     import FancyInput from '../shared/FancyInput.svelte';
@@ -20,16 +22,16 @@
     }
 
     function addStyle() {
-        fetchAddStyle($currentSeries).then(fetchGetStyles($currentSeries));
+        fetchAddStyle().then(fetchGetStyles());
         openNew = true;
     }
 
     function submit() {
-        fetchEditStyle($currentSeries, styleIndex, styleTitle, styleAttributes).then(fetchGetStyles($currentSeries));
+        fetchEditStyle(styleIndex, styleTitle, styleAttributes).then(fetchGetStyles());
     }
 
     function deleteStyle() {
-        fetchDeleteStyle($currentSeries, styleIndex).then(fetchGetStyles($currentSeries));
+        fetchDeleteStyle($currentSeries, styleIndex).then(fetchGetStyles());
         showModal = false;
     }
 
@@ -40,9 +42,7 @@
     let styleIndex = 0;
     let showModal = false;
 
-    onMount(() => {
-        fetchGetStyles($currentSeries);
-    });
+    onMount(() => fetchGetStyles());
 
     seriesStyles.subscribe((stylePromise) => {
         Promise.resolve(stylePromise).then((response) => {

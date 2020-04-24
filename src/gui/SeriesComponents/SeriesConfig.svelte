@@ -1,5 +1,8 @@
 <script>
-    import { currentSeries, currentVolume, currentChapter, currentPage, fetchAddVolume, pageMode, fetchSeriesTree, fetchDeleteSeries } from '../store.js';
+    import {
+        currentSeries, currentVolume, currentChapter, currentPage, graphqlBase,
+        fetchAddVolume, pageMode, fetchSeriesTree, fetchDeleteSeries
+    } from '../store.js';
     import NoteView from './NoteView.svelte';
     import StyleTable from './StyleTable.svelte';
     import LanguageTable from './LanguageTable.svelte';
@@ -12,14 +15,12 @@
     let showModal = false;
 
     function addVolume() {
-        fetchAddVolume($currentSeries).then(
-            fetchSeriesTree($currentSeries)
-        );
+        fetchAddVolume().then(fetchSeriesTree());
     }
 
     function removeSeries() {
-        fetchDeleteSeries($currentSeries).then(() => {
-            fetchSeriesTree($currentSeries);
+        fetchDeleteSeries().then(() => {
+            fetchSeriesTree();
             currentVolume.set(null);
             currentChapter.set({});
             currentPage.set({});
@@ -31,7 +32,7 @@
         const formData = new FormData();
         formData.append("image", e.detail);
         formData.append("series", JSON.stringify($currentSeries));
-        fetch('http://localhost:4000/uploadSeriesImage', { method: "POST", body: formData})
+        fetch(`${graphqlBase}/uploadSeriesImage`, { method: "POST", body: formData})
     }
 </script>
 

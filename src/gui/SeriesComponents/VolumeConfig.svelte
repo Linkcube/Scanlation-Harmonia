@@ -1,5 +1,5 @@
 <script>
-    import { currentSeries, currentVolume, fetchAddChapter, fetchSeriesTree, fetchDeleteVolume, viewMode } from '../store.js';
+    import { fetchAddChapter, fetchSeriesTree, fetchDeleteVolume, viewMode } from '../store.js';
     import NoteView from './NoteView.svelte';
     import Modal from '../shared/Modal.svelte';
     import OpenFolder from './OpenFolder.svelte';
@@ -9,14 +9,12 @@
     let showModal = false;
 
     function addChapter() {
-        fetchAddChapter($currentSeries, $currentVolume).then(
-            fetchSeriesTree($currentSeries)
-        );
+        fetchAddChapter().then(fetchSeriesTree());
     }
 
     function removeVolume() {
-        fetchDeleteVolume($currentSeries, $currentVolume).then(() => {
-            fetchSeriesTree($currentSeries);
+        fetchDeleteVolume().then(() => {
+            fetchSeriesTree();
             viewMode.set("series");
         });
     }

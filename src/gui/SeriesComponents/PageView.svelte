@@ -5,7 +5,6 @@
         fetchDeletePage, viewMode, fetchSeriesTree, currentDialogue, dialogueBubble, seriesTree
     } from '../store.js';
     import SelectedDialogue from './SelectedDialogue.svelte';
-    import TableItem from './TableItem.svelte';
     import NoteView from './NoteView.svelte';
     import DraggableDialogue from './DraggableDialogue.svelte';
     import Modal from '../shared/Modal.svelte';
@@ -32,21 +31,19 @@
     function selectDialogue(index) {
         if (index !== $currentDialogue) {
             selectedDialogue.save().then(() => {
-            dialogueBubble.set(dialogueList[index].bubble);
-            fetchPageDialogue($currentSeries, $currentVolume, $currentChapter.id, $currentPage, index);
+                dialogueBubble.set(dialogueList[index].bubble);
+                fetchPageDialogue(index);
             });
         }
     }
 
     function addDialogue() {
-        fetchAddDialogue($currentSeries, $currentVolume, $currentChapter.id, $currentPage).then(
-            fetchPageData($currentSeries, $currentVolume, $currentChapter.id, $currentPage)
-        );
+        fetchAddDialogue().then(fetchPageData());
     }
 
     function deletePage() {
-        fetchDeletePage($currentSeries, $currentVolume, $currentChapter.id, $currentPage).then(() => {
-            fetchSeriesTree($currentSeries);
+        fetchDeletePage().then(() => {
+            fetchSeriesTree();
             viewMode.set("chapter");
         });
     }
@@ -63,28 +60,28 @@
         const formData = new FormData();
         formData.append("image", e.detail);
         formData.append("pageData", JSON.stringify(baseData));
-        fetch('http://localhost:4000/uploadPageImage', { method: "POST", body: formData}).then(() => {
-            fetchPageData($currentSeries, $currentVolume, $currentChapter.id, $currentPage);
+        fetch(`${graphqlBase}/uploadPageImage`, { method: "POST", body: formData}).then(() => {
+            fetchPageData();
         })
     }
 
     function selectPage() {
         $currentDialogue = -1;
-        fetchPageData($currentSeries, $currentVolume, $currentChapter.id, $currentPage);
+        fetchPageData();
     }
 
     function previousPage(pages) {
         let index = pages.findIndex((page) => page.id === $currentPage);
         $currentDialogue = -1;
         currentPage.set(pages[index - 1].id);
-        fetchPageData($currentSeries, $currentVolume, $currentChapter.id, $currentPage);
+        fetchPageData();
     }
 
     function nextPage(pages) {
         let index = pages.findIndex((page) => page.id === $currentPage);
         $currentDialogue = -1;
         currentPage.set(pages[index + 1].id);
-        fetchPageData($currentSeries, $currentVolume, $currentChapter.id, $currentPage);
+        fetchPageData();
     }
 
     let dialogueList = [];
@@ -129,8 +126,6 @@
     }
 
     .page-image-container {
-        /* height: 770px;
-        width: 550px; */
         height: var(--height);
         width: var(--width);
         text-align: center;
@@ -142,8 +137,6 @@
     }
 
     .page-image {
-        /* max-height: 770px;
-        max-width: 550px; */
         max-height: var(--height);
         max-width: var(--width);
         cursor: zoom-in;
@@ -170,23 +163,15 @@
     }
 
     .undo-flex {
-        /* height: 770px;
-        width: 550px; */
         height: var(--height);
         width: var(--width);
         margin-bottom: 20px;
     }
 
     .dialogue-boxes {
-        /* margin-left: 25px; */
         width: 35%;
         min-width: 250px;
         max-width: 600px;
-    }
-
-    .dialogue-box-selection {
-        height: 250px;
-        overflow-y: auto;
     }
 
     .page-view-header {
@@ -197,10 +182,6 @@
 
     .dialogue-header {
         justify-content: flex-start;
-    }
-
-    .page-scaler {
-        justify-content: center;
     }
 
     h2 {

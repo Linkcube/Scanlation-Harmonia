@@ -195,7 +195,6 @@
     }
 
     .scale {
-        /* border: 3px groove goldenrod; */
         position: absolute;
         width: 15px;
         height: 15px;

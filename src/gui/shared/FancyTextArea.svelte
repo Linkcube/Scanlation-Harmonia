@@ -1,6 +1,4 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
-
     export let value = "";
     export let label = "";
     export let id = "";
@@ -8,9 +6,6 @@
     export let resize = "both";
     export let height = 80;
     export let width = 250;
-
-    const dispatch = createEventDispatcher();
-    const blur = () => dispatch('blur');
 </script>
 
 <style>
@@ -96,16 +91,17 @@
 </style>
 
 <div>
-<div class="form-field">
-    <div class="form-field-control">
-        <textarea 
-            {id}
-            style="--resize: {resize}; --height: {height}px; --width: {width}px"
-            bind:value={value}
-            placeholder=" "
-            on:blur={blur}/>
-        <label class="float-text">{label}</label>
+    <div class="form-field">
+        <div class="form-field-control">
+            <textarea 
+                {id}
+                style="--resize: {resize}; --height: {height}px; --width: {width}px"
+                bind:value={value}
+                placeholder=" "
+                on:blur
+            />
+            <label class="float-text">{label}</label>
+        </div>
+        <label class="hint-text">{hint_text}</label>
     </div>
-    <label class="hint-text">{hint_text}</label>
-</div>
 </div>
