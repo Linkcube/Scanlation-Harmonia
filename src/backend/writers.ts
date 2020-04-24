@@ -147,7 +147,7 @@ export const addSeries = (data: { series: string }) => {
   }
   addStyle(data);
   addLanguage(data);
-  saveNotes({ series: data.series, notes: ""});
+  saveNotes({ series: data.series, notes: "" });
   return "Done";
 };
 
