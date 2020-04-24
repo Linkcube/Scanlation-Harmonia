@@ -1,6 +1,9 @@
 <script>
     import { onMount } from 'svelte';
-    import { currentSeries, currentVolume, currentChapter, currentPage, fetchGetNotes, fetchSaveNotes } from '../store.js';
+    import {
+        currentSeries, currentVolume, currentChapter,
+        currentPage, fetchGetNotes, fetchSaveNotes
+    } from '../store.js';
     import FancyTextArea from '../shared/FancyTextArea.svelte';
     import FancySelect from '../shared/FancySelect.svelte';
     export let scope;
@@ -90,10 +93,6 @@
 
 <div class="note-container">
     <div class="note-scope">
-        <!-- <div class="text">
-            <h2>Note Scope</h2>
-        </div> -->
-        <!-- <select bind:value={selected} on:change={changeNoteScope}> -->
         <FancySelect bind:value={selected} on:change={changeNoteScope} label="Note Scope">
             {#if scope === "Page"}
                 <option>Page</option>
@@ -105,7 +104,6 @@
                 <option>Volume</option>
             {/if}
             <option>Series</option>
-        <!-- </select> -->
         </FancySelect>
     </div>
     <div class="center-text">

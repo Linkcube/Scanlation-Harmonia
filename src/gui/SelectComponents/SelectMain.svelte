@@ -14,7 +14,7 @@
 
     function selectSeries(series) {
         currentSeries.set(series);
-        fetchSeriesTree(series);
+        fetchSeriesTree();
         pageMode.set(series);
     }
 
@@ -34,14 +34,6 @@
         });
     };
 
-    // seriesList.subscribe((promise) => {
-    //     Promise.resolve(promise).then((response) => {
-    //         if (resposne.hasOwnProperty('data')) {
-    //             series = response.data.series;
-    //         }
-    //     })
-    // })
-
     fetchSeries();
     fetchGetExportFolder().then(promise => {
         Promise.resolve(promise).then(response => {
@@ -59,7 +51,6 @@
 		background: var(--primary-color);
         display: flex;
         flex-direction: column;
-        /* justify-content: flex-start; */
         height: 100%;
     }
 
@@ -84,8 +75,8 @@
     .loader {
         margin-left: auto;
         margin-right: auto;
-        border: 0px solid #f3f3f3; /* Light grey */
-        border-top: 5px solid #3498db; /* Blue */
+        border: 0px solid #f3f3f3;
+        border-top: 5px solid #3498db;
         border-radius: 50%;
         width: 48px;
         height: 48px;
@@ -95,11 +86,6 @@
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
-    }
-
-    .row {
-        width: 100%;
-        display: flex;
     }
 </style>
 

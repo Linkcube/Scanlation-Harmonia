@@ -1,6 +1,4 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
-    
     export let icon;
     export let title = "";
     export let type = "info";

@@ -1,5 +1,8 @@
 <script>
-    import { currentSeries, currentVolume, currentChapter, fetchAddPage, fetchSeriesTree, fetchDeleteChapter, viewMode } from '../store.js';
+    import {
+        currentSeries, currentVolume, currentChapter,fetchAddPage,
+        fetchSeriesTree, fetchDeleteChapter, viewMode, graphqlBase
+    } from '../store.js';
     import NoteView from './NoteView.svelte';
     import Modal from '../shared/Modal.svelte';
     import OpenFolder from './OpenFolder.svelte';
@@ -10,14 +13,12 @@
     let showModal = false;
 
     function addPage() {
-        fetchAddPage($currentSeries, $currentVolume, $currentChapter.id).then(
-            fetchSeriesTree($currentSeries)
-        );
+        fetchAddPage().then(fetchSeriesTree());
     }
 
     function removeChapter() {
-        fetchDeleteChapter($currentSeries, $currentVolume, $currentChapter.id).then(() => {
-            fetchSeriesTree($currentSeries);
+        fetchDeleteChapter().then(() => {
+            fetchSeriesTree();
             viewMode.set("volume");
         });
     }
@@ -33,8 +34,8 @@
             formData.append("files", file);
         });
         formData.append("chapterData", JSON.stringify(baseData));
-        fetch('http://localhost:4000/uploadChapter', { method: "POST", body: formData}).then(() => {
-            fetchSeriesTree($currentSeries)
+        fetch(`${graphqlBase}/uploadChapter`, { method: "POST", body: formData}).then(() => {
+            fetchSeriesTree()
         })
     }
 </script>

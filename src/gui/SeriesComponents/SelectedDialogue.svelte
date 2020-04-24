@@ -1,6 +1,8 @@
 <script>
-    import { pageDialogue, fetchSaveDialogue, currentSeries, currentVolume, currentChapter,currentPage,
-    currentDialogue, fetchDeleteDialogue, fetchPageData, dialogueBubble, seriesStyles, seriesLanguages } from '../store.js';
+    import {
+        pageDialogue, fetchSaveDialogue, currentDialogue,fetchDeleteDialogue,
+        fetchPageData, dialogueBubble, seriesStyles, seriesLanguages
+    } from '../store.js';
     import Modal from '../shared/Modal.svelte';
     import IconButton from '../shared/IconButton.svelte';
     import FancyInput from '../shared/FancyInput.svelte';
@@ -53,32 +55,20 @@
     export function save() {
         if ($currentDialogue >= 0) {
             return fetchSaveDialogue(
-                $currentSeries,
-                $currentVolume,
-                $currentChapter.id,
-                $currentPage,
-                $currentDialogue,
                 config.title,
                 config.style,
                 config.raw,
-                config.translated,
-                $dialogueBubble
+                config.translated
             ).then(
-                fetchPageData($currentSeries, $currentVolume, $currentChapter.id, $currentPage)
+                fetchPageData()
             );
         }
         return Promise.resolve();
     }
 
     function deleteDialogue() {
-        fetchDeleteDialogue(
-            $currentSeries,
-            $currentVolume,
-            $currentChapter.id,
-            $currentPage,
-            $currentDialogue
-        ).then(() => {
-                fetchPageData($currentSeries, $currentVolume, $currentChapter.id, $currentPage);
+        fetchDeleteDialogue().then(() => {
+                fetchPageData();
                 $currentDialogue = -1;
             }
         );

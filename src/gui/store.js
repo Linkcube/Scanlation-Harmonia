@@ -259,71 +259,108 @@ export function fetchSeries() {
     ));
 };
 
-export function fetchSeriesTree(series) {
+export function fetchSeriesTree() {
     seriesTree.set(fetchGraphQL(
         graphqlUrl, {},
-        seriesTreeQuery(series)
+        seriesTreeQuery(get(currentSeries))
     ));
 };
 
-export function fetchPageData(series, volume, chapter, page) {
+export function fetchPageData() {
     pageData.set(fetchGraphQL(
         graphqlUrl, {},
-        pageDataQuery(series, volume, chapter, page)
+        pageDataQuery(
+            get(currentSeries),
+            get(currentVolume),
+            get(currentChapter).id,
+            get(currentPage)
+        )
     ));
 };
 
-export function fetchPageDialogue(series, volume, chapter, page, dialogue) {
+export function fetchPageDialogue(dialogue) {
     currentDialogue.set(dialogue);
     pageDialogue.set(fetchGraphQL(
         graphqlUrl, {},
-        pageDialogueQuery(series, volume, chapter, page, dialogue)
+        pageDialogueQuery(
+            get(currentSeries),
+            get(currentVolume),
+            get(currentChapter).id,
+            get(currentPage),
+            dialogue
+        )
     ));
 };
 
-export function fetchAddDialogue(series, volume, chapter, page) {
+export function fetchAddDialogue() {
     return fetchGraphQL(
         graphqlUrl, {},
-        addDialogueMutation(series, volume, chapter, page)
+        addDialogueMutation(
+            get(currentSeries),
+            get(currentVolume),
+            get(currentChapter).id,
+            get(currentPage)
+        )
     );
 }
 
-export function fetchSaveDialogue(series, volume, chapter, page, index, title, style, raw, translated, bubble) {
-    if (bubble === null) {
-        console.log(`Dialogue ${index} has a null bubble!!`);
+export function fetchSaveDialogue(title, style, raw, translated) {
+    if (get(dialogueBubble) === null) {
+        console.log(`Dialogue ${get(currentDialogue)} has a null bubble!!`);
         return Promise.resolve();
     }
     return fetchGraphQL(
         graphqlUrl, {},
-        saveDialogueMutation(series, volume, chapter, page, index, title, style, raw, translated, bubble)
+        saveDialogueMutation(
+            get(currentSeries),
+            get(currentVolume),
+            get(currentChapter).id,
+            get(currentPage),
+            get(currentDialogue),
+            title, style, raw, translated,
+            get(dialogueBubble)
+        )
     );
 }
 
-export function fetchDeleteDialogue(series, volume, chapter, page, index) {
+export function fetchDeleteDialogue() {
     return fetchGraphQL(
         graphqlUrl, {},
-        deleteDialogueMutation(series, volume, chapter, page, index)
+        deleteDialogueMutation(
+            get(currentSeries),
+            get(currentVolume),
+            get(currentChapter).id,
+            get(currentPage),
+            get(currentDialogue)
+        )
     );
 }
 
-export function fetchAddPage(series, volume, chapter) {
+export function fetchAddPage() {
     return fetchGraphQL(
         graphqlUrl, {},
-        addPageMutation(series, volume, chapter)
+        addPageMutation(
+            get(currentSeries),
+            get(currentVolume),
+            get(currentChapter).id
+        )
     );
 }
 
-export function fetchAddChapter(series, volume) {
+export function fetchAddChapter() {
     return fetchGraphQL(
         graphqlUrl, {},
-        addChapterMutation(series, volume)
+        addChapterMutation(
+            get(currentSeries),
+            get(currentVolume)
+        )
     );
 }
 
-export function fetchAddVolume(series) {
+export function fetchAddVolume() {
     return fetchGraphQL(
         graphqlUrl, {},
-        addVolumeMutation(series)
+        addVolumeMutation(get(currentSeries))
     );
 }
 
@@ -334,31 +371,43 @@ export function fetchAddSeries(series) {
     );
 }
 
-export function fetchDeletePage(series, volume, chapter, page) {
+export function fetchDeletePage() {
     return fetchGraphQL(
         graphqlUrl, {},
-        deletePageMutation(series, volume, chapter, page)
+        deletePageMutation(
+            get(currentSeries),
+            get(currentVolume),
+            get(currentChapter).id,
+            get(currentPage),
+        )
     );
 }
 
-export function fetchDeleteChapter(series, volume, chapter) {
+export function fetchDeleteChapter() {
     return fetchGraphQL(
         graphqlUrl, {},
-        deleteChapterMutation(series, volume, chapter)
+        deleteChapterMutation(
+            get(currentSeries),
+            get(currentVolume),
+            get(currentChapter).id
+        )
     );
 }
 
-export function fetchDeleteVolume(series, volume) {
+export function fetchDeleteVolume() {
     return fetchGraphQL(
         graphqlUrl, {},
-        deleteVolumeMutation(series, volume)
+        deleteVolumeMutation(
+            get(currentSeries),
+            get(currentVolume)
+        )
     );
 }
 
-export function fetchDeleteSeries(series) {
+export function fetchDeleteSeries() {
     return fetchGraphQL(
         graphqlUrl, {},
-        deleteSeriesMutation(series)
+        deleteSeriesMutation(get(currentSeries))
     );
 }
 
@@ -376,59 +425,59 @@ export function fetchSaveNotes(notes, series, volume, chapter, page) {
     );
 }
 
-export function fetchGetStyles(series) {
+export function fetchGetStyles() {
     seriesStyles.set(fetchGraphQL(
         graphqlUrl, {},
-        getStylesQuery(series)
+        getStylesQuery(get(currentSeries))
     ));
 }
 
-export function fetchAddStyle(series) {
+export function fetchAddStyle() {
     return fetchGraphQL(
         graphqlUrl, {},
-        addStyleMutation(series)
+        addStyleMutation(get(currentSeries))
     );
 }
 
-export function fetchEditStyle(series, index, title, attributes) {
+export function fetchEditStyle(index, title, attributes) {
     return fetchGraphQL(
         graphqlUrl, {},
-        editStyleMutation(series, index, title, attributes)
+        editStyleMutation(get(currentSeries), index, title, attributes)
     );
 }
 
-export function fetchDeleteStyle(series, index) {
+export function fetchDeleteStyle(index) {
     return fetchGraphQL(
         graphqlUrl, {},
-        deleteStyleMutation(series, index)
+        deleteStyleMutation(get(currentSeries), index)
     );
 }
 
-export function fetchGetLanguages(series) {
+export function fetchGetLanguages() {
     seriesLanguages.set(fetchGraphQL(
         graphqlUrl, {},
-        getLanguagesQuery(series)
+        getLanguagesQuery(get(currentSeries))
     ));
 }
 
-export function fetchAddLanguage(series) {
+export function fetchAddLanguage() {
     return fetchGraphQL(
         graphqlUrl, {},
-        addLanguageMutation(series)
+        addLanguageMutation(get(currentSeries))
     );
 }
 
-export function fetchEditLanguage(series, index, title, attributes) {
+export function fetchEditLanguage(index, title, attributes) {
     return fetchGraphQL(
         graphqlUrl, {},
-        editLanguageMutation(series, index, title, attributes)
+        editLanguageMutation(get(currentSeries), index, title, attributes)
     );
 }
 
-export function fetchDeleteLanguage(series, index) {
+export function fetchDeleteLanguage(index) {
     return fetchGraphQL(
         graphqlUrl, {},
-        deleteLanguageMutation(series, index)
+        deleteLanguageMutation(get(currentSeries), index)
     );
 }
 

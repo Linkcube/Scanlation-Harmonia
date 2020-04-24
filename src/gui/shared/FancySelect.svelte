@@ -12,7 +12,7 @@
             if (label.length === 0) {
                 width = 40 + (10 * textLen);
             } else if (label.length < textLen) {
-                width = 10 * textLen;
+                width = Math.max(10 * textLen, 140);
             } else {
                 width = 140;
             }
@@ -50,7 +50,6 @@
         display: flex;
         flex-shrink: 1;
         border-radius: 8px 8px 0 0;
-        /* overflow: hidden; */
         position: relative;
         width: 100%;
     }
@@ -139,7 +138,13 @@
 
 <div class="form-field">
     <div class="form-field-control">
-        <select bind:this={selectEl} bind:value={value} use:scale={value} on:blur on:change on:input style="--width: {width}px;">
+        <select
+            bind:this={selectEl}
+            bind:value={value}
+            use:scale={value}
+            style="--width: {width}px;"
+            on:blur on:change on:input
+        >
             <slot></slot>
         </select>
         <label class="float-text">{label}</label>
