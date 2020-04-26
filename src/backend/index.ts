@@ -38,7 +38,8 @@ import {
   updateWriterExportFolder,
   addLanguage,
   editLanguage,
-  deleteLanguage
+  deleteLanguage,
+  exportChapter
 } from "./writers";
 import { existsSync, mkdirSync, mkdir } from "fs";
 
@@ -95,7 +96,8 @@ const root = {
   getLanguages,
   addLanguage,
   editLanguage,
-  deleteLanguage
+  deleteLanguage,
+  exportChapter
 };
 
 function print(msg: string) {

@@ -40,13 +40,13 @@ export const getSeries = () => {
     const volumes = readdirSync(join(exportFolder, dir), {
       withFileTypes: true
     })
-      .filter((file: Dirent) => file.isDirectory())
+      .filter((file: Dirent) => file.isDirectory() && file.name !== "export")
       .map((folder: Dirent) => folder.name);
     let chapters = 0;
     volumes.forEach(volume => {
       readdirSync(join(exportFolder, dir, volume), { withFileTypes: true })
         .filter(
-          (file: Dirent) => file.isDirectory() && file.name.includes("Volume")
+          (file: Dirent) => file.isDirectory() && file.name.includes("Chapter")
         )
         .forEach(() => (chapters += 1));
     });

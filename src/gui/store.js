@@ -252,6 +252,11 @@ mutation {
     setExportFolder(newFolder: """${newFolder}""")
 }`;
 
+const exportChapterMutation = (series, volume, chapter) => `
+mutation {
+    exportChapter(series: "${series}", volume: "Volume ${volume}", chapter: "Chapter ${chapter}")
+}`;
+
 export function fetchSeries() {
     seriesList.set(fetchGraphQL(
         graphqlUrl, {},
@@ -499,5 +504,16 @@ export function fetchSetExportFolder(newFolder) {
     return fetchGraphQL(
         graphqlUrl, {},
         setExportFolderMutation(newFolder)
+    );
+}
+
+export function fetchExportChapter() {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        exportChapterMutation(
+            get(currentSeries),
+            get(currentVolume),
+            get(currentChapter).id
+        )
     );
 }

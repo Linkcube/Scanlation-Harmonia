@@ -1,4 +1,4 @@
-import { join, resolve } from "path";
+import { join, resolve, extname } from "path";
 import {
   existsSync,
   readFileSync,
@@ -6,10 +6,13 @@ import {
   mkdirSync,
   readdirSync,
   Dirent,
-  unlinkSync
+  unlinkSync,
+  fstat,
+  copyFileSync
 } from "fs";
 import { sync as rimrafSync } from "rimraf";
 import { IDialogueBubble, IStyle, IDialogueData } from "./types";
+import * as open from "open";
 
 let exportFolder = join(resolve("."), "Series");
 
@@ -332,4 +335,77 @@ export const cleanPreviousSeriesImage = (seriesPath: string) => {
       unlinkSync(join(seriesPath, file));
     }
   });
+};
+
+export const exportChapter = (data: {
+  series: string;
+  volume: string;
+  chapter: string;
+}) => {
+  const chapterPath = join(
+    exportFolder,
+    data.series,
+    data.volume,
+    data.chapter
+  );
+  const pages = readdirSync(chapterPath, {
+    withFileTypes: true
+  })
+    .filter((file: Dirent) => file.isDirectory())
+    .map((folder: Dirent) => folder.name)
+    .sort((a: string, b: string) => {
+      if (a && b) {
+        if (Number(a) > Number(b)) return 1;
+        return -1;
+      }
+      return 0;
+    });
+  const exportPages: string[] = [];
+
+  pages.forEach(page => {
+    const pageOptions = {
+      full: "",
+      redraw: "",
+      clean: "",
+      raw: ""
+    };
+    const pageFiles = readdirSync(join(chapterPath, page), {
+      withFileTypes: true
+    })
+      .filter((file: Dirent) => file.isFile())
+      .map((file: Dirent) => file.name);
+    pageFiles.forEach(file => {
+      if (file.includes("redraw.")) {
+        pageOptions.redraw = file;
+      } else if (file.includes("clean.")) {
+        pageOptions.clean = file;
+      } else if (file.includes("raw.")) {
+        pageOptions.raw = file;
+      } else if (file.includes("full.")) {
+        pageOptions.full = file;
+      }
+    });
+    if (pageOptions.full)
+      exportPages.push(join(chapterPath, page, pageOptions.full));
+    else if (pageOptions.redraw)
+      exportPages.push(join(chapterPath, page, pageOptions.redraw));
+    else if (pageOptions.clean)
+      exportPages.push(join(chapterPath, page, pageOptions.clean));
+    else if (pageOptions.raw)
+      exportPages.push(join(chapterPath, page, pageOptions.raw));
+  });
+  const exportPath = join(
+    exportFolder,
+    "export",
+    data.series,
+    data.volume,
+    data.chapter
+  );
+  mkdirSync(exportPath, { recursive: true });
+  exportPages.forEach((page, index) => {
+    copyFileSync(page, join(exportPath, `${index + 1}${extname(page)}`));
+  });
+
+  open(exportPath);
+  return "Done";
 };

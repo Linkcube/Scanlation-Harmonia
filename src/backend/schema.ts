@@ -34,6 +34,7 @@ type Mutation {
     editLanguage(series: String!, index: Int!, title: String!, attributes: String!): String
     deleteLanguage(series: String!, index: Int!): String
     setExportFolder(newFolder: String!): String
+    exportChapter(series: String!, volume: String!, chapter: String!): String
 },
 type seriesObject {
     title: String

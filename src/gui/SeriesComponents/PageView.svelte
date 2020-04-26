@@ -25,7 +25,6 @@
     let selectedDialogue;
     let files;
     let lastTimestamp = Date.now();
-    let selectedPage = $currentPage;
     let pageWidth = 550;
 
     function selectDialogue(index) {
@@ -94,6 +93,10 @@
                 sourceList = response.data.page.sources;
             }
         })
+    });
+
+    currentPage.subscribe(() => {
+        dialogueList = [];
     });
 
     function dragHandle(e) {

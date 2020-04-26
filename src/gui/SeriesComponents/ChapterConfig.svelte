@@ -1,7 +1,8 @@
 <script>
     import {
         currentSeries, currentVolume, currentChapter,fetchAddPage,
-        fetchSeriesTree, fetchDeleteChapter, viewMode, graphqlBase
+        fetchSeriesTree, fetchDeleteChapter, viewMode, graphqlBase,
+        fetchExportChapter
     } from '../store.js';
     import NoteView from './NoteView.svelte';
     import Modal from '../shared/Modal.svelte';
@@ -60,6 +61,7 @@
         <div class="flex-row">
             <IconButton icon="note_add" title="Add Page" on:click={addPage}/>
             <OpenFolder scope="Chapter"></OpenFolder>
+            <IconButton icon="archive" title="Export Chapter" on:click={fetchExportChapter}/>
             <FancyFile on:upload={uploadChapter} value="Import Pages" icon={true} directory={true}/>
         </div>
         <IconButton icon="delete_forever" title="Delete Chapter" type="warn" on:click={() => showModal = true}/>
