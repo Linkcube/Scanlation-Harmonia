@@ -97,10 +97,10 @@
         <FancyInput label="Series Name" bind:value={newName} on:enter={addSeries}></FancyInput>
         <FancyButton value="Add Series" on:click={addSeries}></FancyButton>
     </div>
-    <div class="series-form">
+    <!-- <div class="series-form">
         <FancyInput label="Series Folder Path" bind:value={newFolder} on:enter={setFolder}></FancyInput>
         <FancyButton value="Set Series Folder" on:click={setFolder}></FancyButton>
-    </div>
+    </div> -->
     <div class="card-display">
         {#await $seriesList}
             <div class="loader"></div>

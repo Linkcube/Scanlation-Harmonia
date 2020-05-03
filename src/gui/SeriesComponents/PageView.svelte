@@ -111,6 +111,10 @@
         const fs = dt.files;
         uploadImage({detail: fs[0]});
     }
+
+    function openImage() {
+        window.open(`${graphqlBase}/${sourceList[selectedImage]}?timestamp=${lastTimestamp}`);
+    }
 </script>
 
 <svelte:window
@@ -184,7 +188,7 @@
     }
 
     .dialogue-header {
-        justify-content: flex-start;
+        justify-content: space-between;
     }
 
     h2 {
@@ -251,7 +255,7 @@
         <div class="dialogue-boxes">
             <div class="dialogue-header flex-row">
                 <span class="dialogue-selection-title">Dialogue Selection</span>
-                <IconButton icon="add_box" title="Add Dialogue" on:click={addDialogue}/>
+                <!-- <IconButton icon="add_box" title="Add Dialogue" on:click={addDialogue}/> -->
             </div>
             <FancyTable items={dialogueList} columnSizes={["10%", "90%"]} height="250px">
                 <div class="row" slot="item" let:item let:index>
@@ -281,16 +285,22 @@
                     </option>
                 </FancySelect>
                 <div class="flex-row">
-                    <FancyFile on:upload={uploadImage} icon={true} value="Change Image"/>
+                    <IconButton icon="add_comment" title="Add Dialogue" on:click={addDialogue} scaleX={-1}/>
                     <IconButton
                         title={showDialogue ? "Hide Dialogue" : "Show Dialogue"}
                         on:click={() => showDialogue = !showDialogue}
                         icon={showDialogue ? "speaker_notes" : "speaker_notes_off"}
                     />
+                    <FancyFile on:upload={uploadImage} icon={true} value="Change Image"/>
                     <IconButton
                         title="Expand Page Image"
                         on:click={() => showImageModal = !showImageModal}
                         icon="aspect_ratio"
+                    />
+                    <IconButton
+                        title="Open in a New Tab"
+                        icon="launch"
+                        on:click={openImage}
                     />
                 </div>
             </div>
@@ -305,11 +315,11 @@
                     on:click={() => showImageModal = !showImageModal}
                 >
                     {#if sourceList[selectedImage]}
-                        <img alt="no-page-image" class="page-image" style="--width: {pageWidth}px; --height: {pageWidth * 1.4}px;"
+                        <img alt="page-image" class="page-image" style="--width: {pageWidth}px; --height: {pageWidth * 1.4}px;"
                             src={`${graphqlBase}/${sourceList[selectedImage]}?timestamp=${lastTimestamp}`}
                         >
                     {:else}
-                        <h2>No image found, please upload one.</h2>
+                        <h2>No image found, please upload one using the icon above.</h2>
                     {/if}
                     {#if showDialogue}
                         {#each dialogueList as dialogue, index}

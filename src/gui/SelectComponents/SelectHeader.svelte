@@ -1,5 +1,8 @@
 <script>
     import { seriesList } from '../store.js';
+    import Modal from '../shared/Modal.svelte';
+
+    let showModal = false;
 </script>
 
 <style>
@@ -25,15 +28,22 @@
         justify-content: space-around;
         width: 100%;
     }
+
+    img {
+        height: 40px;
+        cursor: pointer;
+        background: white;
+    }
 </style>
 
 <header style="--primary-color:lightblue">
     <div class="text-alignment">
-        <div>
-            <p style="--primary-color:white">
-                Scanlation Harmonia
-            </p>
-        </div>
+            <img
+                src="./Static/logo_alpha2.png"
+                alt="Scanlation Harmonia"
+                on:click={() => showModal = true}
+                title="More Info"
+            >
         <div>
             {#await $seriesList then value}
                 {#if Object.keys(value).length > 0}
@@ -49,3 +59,13 @@
         </div>
     </div>
 </header>
+
+{#if showModal}
+    <Modal use_submission={false} on:close={() => showModal = false}>
+        <h2>Thank you for using Scanlation Harmonia!</h2>
+        <h3>For first time users</h3>
+        <p>Start off by entering the name of the series you're planning to work on, and then click add series. This will generate a volume, chapter, and page in the series to give you an idea of how this program works.</p>
+        <h3>Usage and other information can be found in the below link.</h3>
+        <p>Github Page <a href="https://github.com/Linkcube/Scanlation-Harmonia">Link</a></p>
+    </Modal>
+{/if}

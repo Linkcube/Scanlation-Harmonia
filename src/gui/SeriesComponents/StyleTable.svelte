@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import Modal from '../shared/Modal.svelte';
     import {
-        fetchGetStyles, fetchAddStyle, fetchEditStyle, currentSeries,
+        fetchGetStyles, fetchAddStyle, fetchEditStyle,
         seriesStyles, fetchDeleteStyle
     } from '../store.js';
     import FancyButton from '../shared/FancyButton.svelte';
@@ -31,7 +31,7 @@
     }
 
     function deleteStyle() {
-        fetchDeleteStyle($currentSeries, styleIndex).then(fetchGetStyles());
+        fetchDeleteStyle(styleIndex).then(fetchGetStyles());
         showModal = false;
     }
 

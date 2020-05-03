@@ -354,8 +354,10 @@ export const exportChapter = (data: {
     .filter((file: Dirent) => file.isDirectory())
     .map((folder: Dirent) => folder.name)
     .sort((a: string, b: string) => {
-      if (a && b) {
-        if (Number(a) > Number(b)) return 1;
+      const aNum = a.split(" ")[1];
+      const bNum = b.split(" ")[1];
+      if (aNum && bNum) {
+        if (Number(aNum) > Number(bNum)) return 1;
         return -1;
       }
       return 0;

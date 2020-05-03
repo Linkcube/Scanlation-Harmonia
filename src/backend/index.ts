@@ -43,6 +43,9 @@ import {
 } from "./writers";
 import { existsSync, mkdirSync, mkdir } from "fs";
 
+const validImageFiles = [
+  ".png", ".jpg", ".jpeg", ".jfif", ".pjpeg", "pjp", ".bmp", ".gif", ".apng", ".ico", ".cur", ".svg", ".tif", ".tiff", ".webp"
+]
 let exportFolder = join(resolve("."), "Series");
 
 const setExportFolder = (data: { newFolder: string }) => {
@@ -161,6 +164,7 @@ function startService() {
     let pageIndex = 1;
     Array.from(req.files.files).forEach((element: any) => {
       let done = false;
+      if (!validImageFiles.includes(extname(element.name))) return;
       while (!done) {
         if (!existsSync(join(chapterPath, `Page ${pageIndex}`))) {
           mkdirSync(join(chapterPath, `Page ${pageIndex}`));
