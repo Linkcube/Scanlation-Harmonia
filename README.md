@@ -1,4 +1,4 @@
-![SH logo](https://github.com/Linkcube/Scanlation-Harmonia/tree/master/public/static/logo_alpha2_circle_sm.png "Logo")
+![SH logo](https://raw.githubusercontent.com/Linkcube/Scanlation-Harmonia/master/public/Static/logo_alpha2_circle_sm.png "Logo")
 
 # Scanlation Harmonia
 
