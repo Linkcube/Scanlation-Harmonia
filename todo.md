@@ -87,3 +87,19 @@ x Allow the user to change the folder
 - change which data is sent in preview/full
     + make it more efficeint
     + If components allow for more data to be previewed then include it
+
+## Testing notes 2
+x Make the set folder more noticable on change/failure
+    + Specify that it should be in it's own scanlation folder as it generates files
+x Filter import to exclude non-image files
+- right clicking on things (more delete options etc)
+
+## Usage notes
+x Add dialogue button too far away from the image
+    + maybe above the image?
+- Would be nice to have image expanded and be able to type into dialogue boxes at the same time
+-
+
+## Online shared service
+- User firepad-esc tech to handle multiple users editing the same file
+- May require changing how dialogues are handled

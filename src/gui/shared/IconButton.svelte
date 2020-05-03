@@ -2,6 +2,8 @@
     export let icon;
     export let title = "";
     export let type = "info";
+    export let scaleX = 1;
+    export let scaleY = 1;
 </script>
 
 <style>
@@ -34,6 +36,8 @@
         -ms-user-select: none; /* IE 10+ and Edge */
         user-select: none; /* Standard syntax */
         margin-bottom: 7px;
+        -webkit-transform: scaleX(var(--scaleX)) scaleY(var(--scaleY));
+        transform: scaleX(var(--scaleX)) scaleY(var(--scaleY));
     }
 
     .material-icons::-moz-focus-inner {
@@ -42,5 +46,13 @@
 </style>
 
 <div>
-    <button title={title} class="material-icons {type}" on:click on:dragenter on:dragover on:drop>{icon}</button>
+    <button
+        title={title}
+        class="material-icons {type}"
+        style="--scaleX:{scaleX}; --scaleY:{scaleY}"
+        on:click
+        on:dragenter
+        on:dragover
+        on:drop
+    >{icon}</button>
 </div>

@@ -36,6 +36,7 @@
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-svelte": "^5.0.3",
     "rollup-plugin-terser": "^5.1.2",
+    "sirv-cli": "^0.4.5",
     "svelte": "^3.0.0",
     "svelte-preview-card": "^1.0.1",
     "ts-node": "^8.6.2",
@@ -54,7 +55,6 @@
     "open": "^7.0.3",
     "process": "^0.11.10",
     "rimraf": "^3.0.2",
-    "sirv-cli": "^0.4.4",
     "tree-kill": "^1.2.2"
   },
   "files": [

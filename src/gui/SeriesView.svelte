@@ -86,6 +86,14 @@
     a, a:hover, a:visited {
         color: black;
     }
+
+    .home-container {
+        margin-right: 10px;
+    }
+
+    .nav-container {
+        margin-left: 10px;
+    }
 </style>
 
 
@@ -95,11 +103,13 @@
     </div>
     <div class="right-side">
         <div class="page-view-header flex-row" class:no-margin={!$navOpen}>
-            <IconButton
-                title="Toggle Navigation"
-                icon={$navOpen ? "menu_open" : "menu"}
-                on:click={navOpen.set(!$navOpen)}
-            />
+            <div class="nav-container">
+                <IconButton
+                    title="Toggle Navigation"
+                    icon={$navOpen ? "menu_open" : "menu"}
+                    on:click={navOpen.set(!$navOpen)}
+                />
+            </div>
             <div class="nav-path">
                 <a on:click={() => viewMode.set("series")} href="#series">{$currentSeries}</a>
                 {#if $viewMode === "page" || $viewMode === "volume" || $viewMode === "chapter"}
@@ -109,7 +119,13 @@
                     {/if}
                 {/if}
             </div>
-            <IconButton icon="home" title="Return to Series Selection" on:click={seriesSelection}/>
+            <div class="home-container">
+                <IconButton
+                    icon="home"
+                    title="Return to Series Selection"
+                    on:click={seriesSelection}
+                />
+            </div>
         </div>
         <div class="view-mode" class:nav-padding={$navOpen}>
             {#if $viewMode === "page"}
