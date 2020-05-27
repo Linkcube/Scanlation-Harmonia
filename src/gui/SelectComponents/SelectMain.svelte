@@ -1,12 +1,15 @@
 <script>
-    import PreviewCard from 'svelte-preview-card';
+    // import PreviewCard from 'svelte-preview-card';
     import {
         pageMode, currentSeries, seriesList, fetchSeries,
         fetchSeriesTree, graphqlBase, fetchAddSeries,
         fetchGetExportFolder, fetchSetExportFolder
     } from '../store.js';
-    import FancyInput from '../shared/FancyInput.svelte';
-    import FancyButton from '../shared/FancyButton.svelte';
+    import {
+        MaterialButton,
+        MaterialInput,
+        PreviewCard
+    } from 'linkcube-svelte-components';
 
     const series = [];
     let newName = "";
@@ -48,7 +51,7 @@
     main {
         flex-grow: 1;
         overflow-y: auto;
-		background: var(--primary-color);
+		background: var(--background-color, white);
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -94,12 +97,12 @@
         <h1>Series Selection</h1>
     </div>
     <div class="series-form">
-        <FancyInput label="Series Name" bind:value={newName} on:enter={addSeries}></FancyInput>
-        <FancyButton value="Add Series" on:click={addSeries}></FancyButton>
+        <MaterialInput label="Series Name" bind:value={newName} on:enter={addSeries}></MaterialInput>
+        <MaterialButton value="Add Series" on:click={addSeries}></MaterialButton>
     </div>
     <!-- <div class="series-form">
-        <FancyInput label="Series Folder Path" bind:value={newFolder} on:enter={setFolder}></FancyInput>
-        <FancyButton value="Set Series Folder" on:click={setFolder}></FancyButton>
+        <MaterialInput label="Series Folder Path" bind:value={newFolder} on:enter={setFolder}></MaterialInput>
+        <MaterialButton value="Set Series Folder" on:click={setFolder}></MaterialButton>
     </div> -->
     <div class="card-display">
         {#await $seriesList}
@@ -107,10 +110,10 @@
         {:then value}
             {#each value.data.series as series}
                 <PreviewCard
-                    primary_text={series.title}
-                    sub_text="{series.volumes} Vol. {series.chapters} Chapters"
-                    background_source={series.cover ? `${graphqlBase}/${series.cover}` : undefined}
-                    on:open={() => selectSeries(series.title)}
+                    primaryText={series.title}
+                    subText="{series.volumes} Vol. {series.chapters} Chapters"
+                    backgroundSource={series.cover ? `${graphqlBase}/${series.cover}` : undefined}
+                    on:click={() => selectSeries(series.title)}
                 ></PreviewCard>
             {/each}
         {/await}

@@ -8,9 +8,8 @@
     import LanguageTable from './LanguageTable.svelte';
     import Modal from '../shared/Modal.svelte';
     import OpenFolder from './OpenFolder.svelte';
-    import FancyButton from '../shared/FancyButton.svelte';
     import FancyFile from '../shared/FancyFile.svelte';
-    import IconButton from '../shared/IconButton.svelte';
+    import { IconButton } from 'linkcube-svelte-components';
 
     let showModal = false;
 
@@ -54,6 +53,10 @@
         flex-wrap: wrap;
         justify-content: space-around;
     }
+
+    .delete {
+        --secondary-text-color: var(--delete-color, red);
+    }
 </style>
 
 
@@ -64,7 +67,9 @@
             <OpenFolder scope="Series"></OpenFolder>
             <FancyFile on:upload={uploadImage} icon={true} value="Change Series Cover"/>
         </div>
-        <IconButton icon="delete_forever" title="Delete Series" type="warn" on:click={() => showModal = true}/>
+        <div class="delete">
+            <IconButton icon="delete_forever" title="Delete Series" on:click={() => showModal = true}/>
+        </div>
     </div>
     <div class="tables-container">
         <StyleTable/>

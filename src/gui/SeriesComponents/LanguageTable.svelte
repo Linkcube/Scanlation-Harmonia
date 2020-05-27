@@ -5,12 +5,14 @@
         fetchGetLanguages, fetchAddLanguage, fetchEditLanguage,
         seriesLanguages, fetchDeleteLanguage
     } from '../store.js';
-    import FancyButton from '../shared/FancyButton.svelte';
-    import IconButton from '../shared/IconButton.svelte';
-    import FancyInput from '../shared/FancyInput.svelte';
-    import FancyTextArea from '../shared/FancyTextArea.svelte';
-    import FancyTable from '../shared/FancyTable.svelte';
-    import FancyTableRow from '../shared/FancyTableRow.svelte';
+
+    import {
+        IconButton,
+        MaterialInput,
+        MaterialTable,
+        MaterialTableRow,
+        MaterialTextArea,
+    } from 'linkcube-svelte-components';
 
     let openNew = false;
 
@@ -90,6 +92,10 @@
         margin-bottom: auto;
         margin-right: 10px;
     }
+
+    .delete {
+        --secondary-text-color: var(--delete-color, red);
+    }
 </style>
 
 <div class="language-container">
@@ -97,30 +103,32 @@
         <span>Languages</span>
         <IconButton icon="add_box" title="Add language" on:click={addLanguage}/>
     </div>
-    <FancyTable items={languageList} columnSizes={["10%", "40%", "60%"]} height="500px">
+    <MaterialTable items={languageList} columnSizes={["10%", "40%", "60%"]} height="500px">
         <div slot="header">
-            <FancyTableRow values={["#", "Language", "Notes"]} type="header"/>
+            <MaterialTableRow values={["#", "Language", "Notes"]} type="header"/>
         </div>
         <div slot="item" let:item let:index>
-            <FancyTableRow
+            <MaterialTableRow
                 values={[`${index + 1}.`, item.title, item.attributes]}
                 type="click row"
                 on:click={() => selectLanguage(index)}
             />
         </div>
-    </FancyTable>
+    </MaterialTable>
 </div>
 
 {#if showModal}
     <Modal on:close={() => showModal = false} on:submission={submit}>
         <div class="top-row">
-            <FancyInput label="Language" bind:value={languageTitle}/>
+            <MaterialInput label="Language" bind:value={languageTitle}/>
             {#if languageIndex > 0}
-                <IconButton icon="delete_forever" title="Delete Language" type="warn" on:click={deleteLanguage}/>
+                <div class="delete">
+                    <IconButton icon="delete_forever" title="Delete Language" on:click={deleteLanguage}/>
+                </div>
             {/if}
         </div>
         <div class="bottom-row">
-            <FancyTextArea label="Language Notes" bind:value={languageAttributes} width=500 resize="vertical"/>
+            <MaterialTextArea label="Language Notes" bind:value={languageAttributes} width=500 resize="vertical"/>
         </div>
     </Modal>
 {/if}

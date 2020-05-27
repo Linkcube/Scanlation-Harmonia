@@ -5,8 +5,7 @@
     import SeriesConfig from './SeriesComponents/SeriesConfig.svelte';
     import { pageMode, navOpen, viewMode, currentSeries, currentVolume, currentChapter, currentPage } from './store.js';
     import SeriesTable from './SeriesComponents/SeriesTable.svelte';
-    import FancyButton from './shared/FancyButton.svelte';
-    import IconButton from './shared/IconButton.svelte';
+    import { IconButton } from 'linkcube-svelte-components';
 
     function seriesSelection() {
         currentVolume.set(null);
@@ -20,7 +19,7 @@
 <style>
     .page-view-header {
 		flex-shrink: 0;
-        background: white;
+        background: var(--background-color, white);
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -46,7 +45,7 @@
         left: 0px;
         height: 100%;
         transition-duration: 400ms;
-        background: white;
+        background: var(--background-color, white);
         z-index: 1;
     }
 
@@ -77,6 +76,7 @@
         margin-bottom: 20px;
         transition-duration: 400ms;
         padding-top: 50px;
+        background: var(--background-color, white);
     }
 
     .nav-padding {

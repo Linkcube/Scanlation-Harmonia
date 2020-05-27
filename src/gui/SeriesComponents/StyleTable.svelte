@@ -5,12 +5,13 @@
         fetchGetStyles, fetchAddStyle, fetchEditStyle,
         seriesStyles, fetchDeleteStyle
     } from '../store.js';
-    import FancyButton from '../shared/FancyButton.svelte';
-    import IconButton from '../shared/IconButton.svelte';
-    import FancyInput from '../shared/FancyInput.svelte';
-    import FancyTextArea from '../shared/FancyTextArea.svelte';
-    import FancyTable from '../shared/FancyTable.svelte';
-    import FancyTableRow from '../shared/FancyTableRow.svelte';
+    import {
+        IconButton,
+        MaterialInput,
+        MaterialTextArea,
+        MaterialTable,
+        MaterialTableRow
+    } from 'linkcube-svelte-components';
 
     let openNew = false;
 
@@ -90,6 +91,10 @@
         margin-bottom: auto;
         margin-right: 10px;
     }
+
+    .delete {
+        --secondary-text-color: var(--delete-color, red);
+    }
 </style>
 
 <div class="style-container">
@@ -97,28 +102,30 @@
         <span>Style Configuration</span>
         <IconButton icon="add_box" title="Add Style" on:click={addStyle}/>
     </div>
-    <FancyTable items={styleList} columnSizes={["10%", "40%", "60%"]} height="500px">
+    <MaterialTable items={styleList} columnSizes={["10%", "40%", "60%"]} height="500px">
         <div slot="header">
-            <FancyTableRow values={["#", "Name", "Style"]} type="header"/>
+            <MaterialTableRow values={["#", "Name", "Style"]} type="header"/>
         </div>
         <div slot="item" let:item let:index>
-            <FancyTableRow
+            <MaterialTableRow
                 values={[`${index + 1}.`, item.title, item.attributes]}
                 type="click row"
                 on:click={() => selectStyle(index)}
             />
         </div>
-    </FancyTable>
+    </MaterialTable>
 </div>
 
 {#if showModal}
     <Modal on:close={() => showModal = false} on:submission={submit}>
         <div class="top-row">
-            <FancyInput label="Style Title" bind:value={styleTitle}/>
-            <IconButton icon="delete_forever" title="Delete Style" type="warn" on:click={deleteStyle}/>
+            <MaterialInput label="Style Title" bind:value={styleTitle}/>
+            <div class="delete">
+                <IconButton icon="delete_forever" title="Delete Style" on:click={deleteStyle}/>
+            </div>
         </div>
         <div class="bottom-row">
-            <FancyTextArea label="Style Attributes" bind:value={styleAttributes} width=500 resize="vertical"/>
+            <MaterialTextArea label="Style Attributes" bind:value={styleAttributes} width=500 resize="vertical"/>
         </div>
     </Modal>
 {/if}

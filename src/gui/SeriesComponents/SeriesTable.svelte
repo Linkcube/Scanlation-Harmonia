@@ -3,8 +3,10 @@
         viewMode, currentVolume, currentChapter, currentPage, currentSeries,
         seriesTree, fetchPageData, currentDialogue, pageData
     } from '../store.js'
-    import FancyTable from '../shared/FancyTable.svelte';
-    import FancyTableRow from '../shared/FancyTableRow.svelte';
+    import {
+        MaterialTable,
+        MaterialTableRow
+    } from 'linkcube-svelte-components';
 
     function selectItem(item) {
         if (item.hasOwnProperty('page')) {
@@ -53,46 +55,46 @@
 </style>
 
 <div class="table-container">
-<FancyTable items={seriesData} columnSizes={["100%"]}>
-    <div slot="header">
-        <FancyTableRow
-            values={[$currentSeries]}
-            on:click={() => selectItem({})}
-            type="click header"
-        />
-    </div>
-    <div slot="item" let:item={volume} let:index={volumeIndex}>
-        <FancyTableRow
-            values={[`Volume ${volumeIndex+1}`]}
-            on:click={() => selectItem({ volume: volume.id })}
-            type="click row expand"
-        >
-            <div slot="children">
-                <FancyTable items={volume.chapters} columnSizes={["90%"]}>
-                    <div slot="item" let:item={chapter} let:index={chapterIndex}>
-                        <FancyTableRow
-                            values={[`Chapter ${chapterIndex+1}`]}
-                            on:click={() => selectItem({ volume: volume.id, chapter: chapter.id, title: chapter.title })}
-                            type="click row expand"
-                            depth=1
-                        >
-                            <div slot="children">
-                                <FancyTable items={chapter.pages} columnSizes={["100%"]}>
-                                    <div slot="item" let:item={page} let:index={pageIndex}>
-                                        <FancyTableRow
-                                            values={[`Page ${pageIndex+1}`]}
-                                            on:click={() => selectItem({ volume: volume.id, chapter: chapter.id, page: page.id, title: chapter.title })}
-                                            type="click row"
-                                            depth=5
-                                        />
-                                    </div>
-                                </FancyTable>
-                            </div>
-                        </FancyTableRow>
-                    </div>
-                </FancyTable>
-            </div>
-        </FancyTableRow>
-    </div>
-</FancyTable>
+    <MaterialTable items={seriesData} columnSizes={["100%"]}>
+        <div slot="header">
+            <MaterialTableRow
+                values={[$currentSeries]}
+                on:click={() => selectItem({})}
+                type="click header"
+            />
+        </div>
+        <div slot="item" let:item={volume} let:index={volumeIndex}>
+            <MaterialTableRow
+                values={[`Volume ${volumeIndex+1}`]}
+                on:click={() => selectItem({ volume: volume.id })}
+                type="click row expand"
+            >
+                <div slot="children">
+                    <MaterialTable items={volume.chapters} columnSizes={["90%"]}>
+                        <div slot="item" let:item={chapter} let:index={chapterIndex}>
+                            <MaterialTableRow
+                                values={[`Chapter ${chapterIndex+1}`]}
+                                on:click={() => selectItem({ volume: volume.id, chapter: chapter.id, title: chapter.title })}
+                                type="click row expand"
+                                depth=1
+                            >
+                                <div slot="children">
+                                    <MaterialTable items={chapter.pages} columnSizes={["100%"]}>
+                                        <div slot="item" let:item={page} let:index={pageIndex}>
+                                            <MaterialTableRow
+                                                values={[`Page ${pageIndex+1}`]}
+                                                on:click={() => selectItem({ volume: volume.id, chapter: chapter.id, page: page.id, title: chapter.title })}
+                                                type="click row"
+                                                depth=5
+                                            />
+                                        </div>
+                                    </MaterialTable>
+                                </div>
+                            </MaterialTableRow>
+                        </div>
+                    </MaterialTable>
+                </div>
+            </MaterialTableRow>
+        </div>
+    </MaterialTable>
 </div>

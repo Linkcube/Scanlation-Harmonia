@@ -1,7 +1,9 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    import FancyButton from './FancyButton.svelte';
-    import IconButton from './IconButton.svelte';
+    import { 
+        IconButton,
+        MaterialButton
+    } from 'linkcube-svelte-components';
 
     export let value;
     export let directory = false;
@@ -66,7 +68,7 @@
         title={value}
     />
 {:else}
-    <FancyButton
+    <MaterialButton
         on:click={() => files.click()}
         on:dragenter={dragHandle}
         on:dragover={dragHandle}

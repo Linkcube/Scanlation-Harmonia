@@ -4,10 +4,12 @@
         fetchPageData, dialogueBubble, seriesStyles, seriesLanguages
     } from '../store.js';
     import Modal from '../shared/Modal.svelte';
-    import IconButton from '../shared/IconButton.svelte';
-    import FancyInput from '../shared/FancyInput.svelte';
-    import FancyTextArea from '../shared/FancyTextArea.svelte';
-    import FancySelect from '../shared/FancySelect.svelte';
+    import {
+        IconButton,
+        MaterialInput,
+        MaterialSelect,
+        MaterialTextArea
+    } from 'linkcube-svelte-components';
 
     const config = {
         title: '',
@@ -103,30 +105,36 @@
         justify-content: space-around;
         flex-wrap: wrap;
     }
+
+    .delete {
+        --secondary-text-color: var(--delete-color, red);
+    }
 </style>
 
 {#if $currentDialogue >= 0 }
     <div class="selected-dialogue">
         <div class="dialogue-settings">
-            <FancyInput bind:value={config.title} label="Dialogue Title" on:blur={save}/>
+            <MaterialInput bind:value={config.title} label="Dialogue Title" on:blur={save}/>
             <div class="styled-selection">
-                <FancySelect bind:value={config.style} on:blur={save} label="Dialogue Style">
+                <MaterialSelect bind:value={config.style} on:blur={save} label="Dialogue Style">
                     {#each styleList as style, index}
                         <option value={index}>{style.title}</option>
                     {/each}
-                </FancySelect>
+                </MaterialSelect>
             </div>
             <div class="styled-selection">
-                <FancySelect bind:value={config.language} on:blur={save} label="Languge">
+                <MaterialSelect bind:value={config.language} on:blur={save} label="Languge">
                     {#each languageList as language, index}
                         <option value={index}>{language.title}</option>
                     {/each}
-                </FancySelect>
+                </MaterialSelect>
             </div>
-            <IconButton icon="delete_forever" title="Delete Dialogue" type="warn" on:click={() => showModal = true}/>
+            <div class="delete">
+                <IconButton icon="delete_forever" title="Delete Dialogue" on:click={() => showModal = true}/>
+            </div>
         </div>
         <div class="center-text">
-            <FancyTextArea
+            <MaterialTextArea
                 label="Raw Text"
                 bind:value={config.raw}
                 on:blur={save}
@@ -134,7 +142,7 @@
                 width=270
                 resize="none"
             />
-            <FancyTextArea
+            <MaterialTextArea
                 label="Translated Text"
                 bind:value={config.translated[config.language]}
                 on:blur={save}

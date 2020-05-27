@@ -1,6 +1,6 @@
 <script>
 	import { createEventDispatcher, onDestroy } from 'svelte';
-	import FancyButton from './FancyButton.svelte';
+	import { MaterialButton } from 'linkcube-svelte-components';
 	
 	export let use_submission = true;
 
@@ -55,10 +55,16 @@
     <br>
     <div class="user-actions">
 		{#if use_submission}
-			<FancyButton on:click={close} value="Cancel" type="warn"/>
-			<FancyButton on:click={submission} value="Accept" type="submit"/>
+			<div class="cancel">
+				<MaterialButton on:click={close} value="Cancel"/>
+			</div>
+			<div class="submit">
+			<MaterialButton on:click={submission} value="Accept"/>
+			</div>
 		{:else}
-			<FancyButton on:click={close} value="Close" type="submit"/>
+			<div class="submit">
+				<MaterialButton on:click={close} value="Close" type="submit"/>
+			</div>
 		{/if}
     </div>
 </div>
@@ -85,7 +91,7 @@
 		transform: translate(-50%,-50%);
 		padding: 1em;
 		border-radius: 0.2em;
-		background: white;
+		background: var(--background-color, white);
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.29);
 		z-index: 2;
 	}
@@ -98,4 +104,14 @@
         -ms-user-select: none; /* IE 10+ and Edge */
         user-select: none; /* Standard syntax */
     }
+
+	.cancel {
+		--primary-text-color: var(--button-text-color, red);
+		--secondary-color: var(--button-background-color, rgb(253, 229, 232));
+	}
+
+	.submit {
+		--primary-text-color: var(--button-text-color, blue);
+		--secondary-color: var(--button-background-color, rgb(235, 246, 250));
+	}
 </style>
