@@ -7,9 +7,8 @@
     import NoteView from './NoteView.svelte';
     import Modal from '../shared/Modal.svelte';
     import OpenFolder from './OpenFolder.svelte';
-    import FancyButton from '../shared/FancyButton.svelte';
     import FancyFile from '../shared/FancyFile.svelte';
-    import IconButton from '../shared/IconButton.svelte';
+    import { IconButton } from 'linkcube-svelte-components';
 
     let showModal = false;
 
@@ -53,6 +52,10 @@
         display: flex;
         flex-direction: row;
     }
+
+    .delete {
+        --secondary-text-color: var(--delete-color, red);
+    }
 </style>
 
 
@@ -64,7 +67,9 @@
             <IconButton icon="archive" title="Export Chapter" on:click={fetchExportChapter}/>
             <FancyFile on:upload={uploadChapter} value="Import Pages" icon={true} directory={true}/>
         </div>
-        <IconButton icon="delete_forever" title="Delete Chapter" type="warn" on:click={() => showModal = true}/>
+        <div class="delete">
+            <IconButton icon="delete_forever" title="Delete Chapter" on:click={() => showModal = true}/>
+        </div>
     </div>
     <NoteView scope="Chapter"></NoteView>
 </div>

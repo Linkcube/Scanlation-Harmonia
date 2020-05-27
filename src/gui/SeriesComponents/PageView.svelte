@@ -10,12 +10,17 @@
     import Modal from '../shared/Modal.svelte';
     import ImageModal from '../shared/ImageModal.svelte';
     import OpenFolder from './OpenFolder.svelte';
-    import FancyButton from '../shared/FancyButton.svelte';
-    import FancySelect from '../shared/FancySelect.svelte';
     import FancyFile from '../shared/FancyFile.svelte';
-    import IconButton from '../shared/IconButton.svelte';
-    import FancyTable from '../shared/FancyTable.svelte';
-    import FancyTableRow from '../shared/FancyTableRow.svelte';
+    import {
+        IconButton,
+        MaterialButton,
+        MaterialInput,
+        MaterialSelect,
+        MaterialTable,
+        MaterialTableRow,
+        MaterialTextArea,
+        PreviewCard
+    } from 'linkcube-svelte-components';
 
     let selectedImage = "raw";
     let imageContainer;
@@ -26,6 +31,7 @@
     let files;
     let lastTimestamp = Date.now();
     let pageWidth = 550;
+    let pages = [];
 
     function selectDialogue(index) {
         if (index !== $currentDialogue) {
@@ -69,14 +75,14 @@
         fetchPageData();
     }
 
-    function previousPage(pages) {
+    function previousPage() {
         let index = pages.findIndex((page) => page.id === $currentPage);
         $currentDialogue = -1;
         currentPage.set(pages[index - 1].id);
         fetchPageData();
     }
 
-    function nextPage(pages) {
+    function nextPage() {
         let index = pages.findIndex((page) => page.id === $currentPage);
         $currentDialogue = -1;
         currentPage.set(pages[index + 1].id);
@@ -115,6 +121,14 @@
     function openImage() {
         window.open(`${graphqlBase}/${sourceList[selectedImage]}?timestamp=${lastTimestamp}`);
     }
+
+    seriesTree.subscribe((promise) => {
+        Promise.resolve(promise).then(response => {
+            if (response.hasOwnProperty('data')) {
+                pages = response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages;
+            }
+        })
+    });
 </script>
 
 <svelte:window
@@ -124,6 +138,7 @@
 <style>
     .modal-image {
         cursor: zoom-out;
+        align-self: self-start;
     }
 
     .page-view-contents {
@@ -213,6 +228,10 @@
         margin-right: 10px;
         font-size: large;
     }
+
+    .delete {
+        --secondary-text-color: var(--delete-color, red);
+    }
 </style>
 
 
@@ -221,56 +240,49 @@
         <OpenFolder scope="Page"></OpenFolder>
         <div class="flex-row">
             {#await $seriesTree then response}
-                {#if 
-                    $currentPage > response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages[0].id
-                }
-                    <a class="nav-button" href="#previous-page" on:click={() => previousPage(response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages)}>{"<"}</a>
+                {#if $currentPage > pages[0].id}
+                    <a class="nav-button" href="#previous-page" on:click={previousPage}>{"<"}</a>
                 {:else}
                     <a class="nav-button" href="#no-previous-page" disabled>{"<"}</a> 
                 {/if}
                 <div class="flex-row">
                     <p>Page</p>
-                    <FancySelect bind:value={$currentPage} on:change={selectPage}>
-                        {#each response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages as page, index}
+                    <MaterialSelect bind:value={$currentPage} on:change={selectPage}>
+                        {#each pages as page, index}
                             <option value={page.id}>{page.id}</option>
                         {/each}
-                    </FancySelect>
+                    </MaterialSelect>
                 </div>
-                {#if 
-                    $currentPage < (
-                        response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages[
-                            response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages.length - 1
-                        ].id
-                    )
-                }
-                    <a class="nav-button" href="#next-page" on:click={() => nextPage(response.data.seriesTree[$currentVolume - 1].chapters[$currentChapter.id - 1].pages)}>{">"}</a>
+                {#if $currentPage < (pages[pages.length - 1].id)}
+                    <a class="nav-button" href="#next-page" on:click={nextPage}>{">"}</a>
                 {:else}
                     <a class="nav-button" href="#no-next-page" disabled>{">"}</a>
                 {/if}
             {/await}
         </div>
-        <IconButton icon="delete_forever" title="Delete Page" type="warn" on:click={() => showModal = true}/>
+        <div class="delete">
+            <IconButton icon="delete_forever" title="Delete Page" on:click={() => showModal = true}/>
+        </div>
     </div>
     <div class="page-view-contents flex-row">
         <div class="dialogue-boxes">
             <div class="dialogue-header flex-row">
                 <span class="dialogue-selection-title">Dialogue Selection</span>
-                <!-- <IconButton icon="add_box" title="Add Dialogue" on:click={addDialogue}/> -->
             </div>
-            <FancyTable items={dialogueList} columnSizes={["10%", "90%"]} height="250px">
+            <MaterialTable items={dialogueList} columnSizes={["10%", "90%"]} height="250px">
                 <div class="row" slot="item" let:item let:index>
-                    <FancyTableRow
+                    <MaterialTableRow
                         type="click row"
                         values={[`${index + 1}.`, item.title]}
                         on:click={() => selectDialogue(index)}
                     />
                 </div>
-            </FancyTable>
+            </MaterialTable>
             <SelectedDialogue bind:this={selectedDialogue}></SelectedDialogue>
         </div>
         <div class="page-display-container flex-column">
             <div class="page-display-options flex-row">
-                <FancySelect bind:value={selectedImage} label="Image">
+                <MaterialSelect bind:value={selectedImage} label="Image">
                     <option value="full">
                         Full
                     </option>
@@ -283,7 +295,7 @@
                     <option value="raw">
                         Raw
                     </option>
-                </FancySelect>
+                </MaterialSelect>
                 <div class="flex-row">
                     <IconButton icon="add_comment" title="Add Dialogue" on:click={addDialogue} scaleX={-1}/>
                     <IconButton

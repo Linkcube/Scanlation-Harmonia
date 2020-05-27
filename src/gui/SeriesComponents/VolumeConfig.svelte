@@ -3,8 +3,7 @@
     import NoteView from './NoteView.svelte';
     import Modal from '../shared/Modal.svelte';
     import OpenFolder from './OpenFolder.svelte';
-    import FancyButton from '../shared/FancyButton.svelte';
-    import IconButton from '../shared/IconButton.svelte';
+    import { IconButton } from 'linkcube-svelte-components';
 
     let showModal = false;
 
@@ -31,6 +30,10 @@
         display: flex;
         flex-direction: row;
     }
+
+    .delete {
+        --secondary-text-color: var(--delete-color, red);
+    }
 </style>
 
 
@@ -40,7 +43,9 @@
             <IconButton icon="create_new_folder" title="Add Chapter" on:click={addChapter}/>
             <OpenFolder scope="Volume"></OpenFolder>
         </div>
-        <IconButton icon="delete_forever" title="Delete Volume" type="warn" on:click={() => showModal = true}/>
+        <div class="delete">
+            <IconButton icon="delete_forever" title="Delete Volume" on:click={() => showModal = true}/>
+        </div>
     </div>
     <NoteView scope="Volume"></NoteView>
 </div>

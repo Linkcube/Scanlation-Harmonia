@@ -1,6 +1,6 @@
 <script>
     import { currentSeries, currentVolume, currentChapter, currentPage, fetchOpenFolder } from '../store.js';
-    import IconButton from '../shared/IconButton.svelte';
+    import { IconButton } from 'linkcube-svelte-components';
     export let scope;
 
     function openFolder() {

@@ -4,8 +4,10 @@
         currentSeries, currentVolume, currentChapter,
         currentPage, fetchGetNotes, fetchSaveNotes
     } from '../store.js';
-    import FancyTextArea from '../shared/FancyTextArea.svelte';
-    import FancySelect from '../shared/FancySelect.svelte';
+    import {
+        MaterialSelect,
+        MaterialTextArea
+    } from 'linkcube-svelte-components';
     export let scope;
     let selected;
     let noteValue;
@@ -93,7 +95,7 @@
 
 <div class="note-container">
     <div class="note-scope">
-        <FancySelect bind:value={selected} on:change={changeNoteScope} label="Note Scope">
+        <MaterialSelect bind:value={selected} on:change={changeNoteScope} label="Note Scope">
             {#if scope === "Page"}
                 <option>Page</option>
             {/if}
@@ -104,9 +106,9 @@
                 <option>Volume</option>
             {/if}
             <option>Series</option>
-        </FancySelect>
+        </MaterialSelect>
     </div>
     <div class="center-text">
-        <FancyTextArea label="Notes" bind:value={noteValue} on:blur={saveNote} height=500 width=700 resize="none"/>
+        <MaterialTextArea label="Notes" bind:value={noteValue} on:blur={saveNote} height=500 width=700 resize="none"/>
     </div>
 </div>

@@ -43,9 +43,7 @@
 
 <div class="modal" role="dialog" aria-modal="true" bind:this={modal}>
 	<slot name="header"></slot>
-    <br>
 	<slot></slot>
-    <br>
 </div>
 
 <style>
@@ -63,14 +61,16 @@
 		position: fixed;
 		left: 50%;
 		top: 50%;
-		max-width: 90%;
-		max-height: 90%;
+		max-width: 95%;
+		max-height: 95%;
 		overflow: auto;
 		transform: translate(-50%,-50%);
 		padding: 1em;
 		border-radius: 0.2em;
-		background: white;
+		background: var(--background-color, white);
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.29);
 		z-index: 2;
+		display: flex;
+		justify-content: center;
 	}
 </style>
