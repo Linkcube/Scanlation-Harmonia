@@ -29,7 +29,7 @@
     <div class="text-row">
         <div class="song-name">
             <p style="--primary-color:white">
-                Scanlation Harmonia Ver. 0.0.1-pr1
+                Scanlation Harmonia Ver. 0.0.1-pr2
             </p>
         </div>
     </div>
