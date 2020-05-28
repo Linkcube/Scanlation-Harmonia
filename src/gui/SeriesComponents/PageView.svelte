@@ -18,12 +18,12 @@
         MaterialSelect,
         MaterialTable,
         MaterialTableRow,
-        MaterialTextArea,
         PreviewCard
     } from 'linkcube-svelte-components';
 
     let selectedImage = "raw";
     let imageContainer;
+    let upload;
     let showDialogue = true;
     let showModal = false;
     let showImageModal = false;
@@ -76,17 +76,21 @@
     }
 
     function previousPage() {
-        let index = pages.findIndex((page) => page.id === $currentPage);
-        $currentDialogue = -1;
-        currentPage.set(pages[index - 1].id);
-        fetchPageData();
+        if ($currentPage > pages[0].id) {
+            let index = pages.findIndex((page) => page.id === $currentPage);
+            $currentDialogue = -1;
+            currentPage.set(pages[index - 1].id);
+            fetchPageData();
+        }
     }
 
     function nextPage() {
-        let index = pages.findIndex((page) => page.id === $currentPage);
-        $currentDialogue = -1;
-        currentPage.set(pages[index + 1].id);
-        fetchPageData();
+        if ($currentPage < (pages[pages.length - 1].id)) {
+            let index = pages.findIndex((page) => page.id === $currentPage);
+            $currentDialogue = -1;
+            currentPage.set(pages[index + 1].id);
+            fetchPageData();
+        }
     }
 
     let dialogueList = [];
@@ -122,6 +126,34 @@
         window.open(`${graphqlBase}/${sourceList[selectedImage]}?timestamp=${lastTimestamp}`);
     }
 
+    function handleKey(event) {
+        if (event.altKey && event.ctrlKey) {
+            if (event.code === "KeyA") {
+                event.preventDefault();
+                selectedDialogue.save();
+                addDialogue();
+            } else if (event.code === "KeyS") {
+                event.preventDefault();
+                showDialogue = !showDialogue
+            } else if (event.code === "KeyD") {
+                event.preventDefault();
+                upload.click();
+            } else if (event.code === "KeyF") {
+                event.preventDefault();
+                showImageModal = !showImageModal;
+            } else if (event.code === "KeyG") {
+                event.preventDefault();
+                openImage();
+            } else if (event.code === "ArrowLeft") {
+                event.preventDefault();
+                previousPage();
+            } else if (event.code === "ArrowRight") {
+                event.preventDefault();
+                nextPage();
+            }
+        }
+    }
+
     seriesTree.subscribe((promise) => {
         Promise.resolve(promise).then(response => {
             if (response.hasOwnProperty('data')) {
@@ -133,6 +165,7 @@
 
 <svelte:window
     on:mousedown={() => {if ($currentDialogue >= 0) selectedDialogue.save()}}
+    on:keyup={handleKey}
 />
 
 <style>
@@ -232,6 +265,11 @@
     .delete {
         --secondary-text-color: var(--delete-color, red);
     }
+
+    .page-number {
+        justify-content: space-around;
+        width: 100px;
+    }
 </style>
 
 
@@ -245,7 +283,7 @@
                 {:else}
                     <a class="nav-button" href="#no-previous-page" disabled>{"<"}</a> 
                 {/if}
-                <div class="flex-row">
+                <div class="flex-row page-number">
                     <p>Page</p>
                     <MaterialSelect bind:value={$currentPage} on:change={selectPage}>
                         {#each pages as page, index}
@@ -297,20 +335,20 @@
                     </option>
                 </MaterialSelect>
                 <div class="flex-row">
-                    <IconButton icon="add_comment" title="Add Dialogue" on:click={addDialogue} scaleX={-1}/>
+                    <IconButton icon="add_comment" title="Add Dialogue (Alt+Ctrl+A)" on:click={addDialogue} scaleX={-1}/>
                     <IconButton
-                        title={showDialogue ? "Hide Dialogue" : "Show Dialogue"}
+                        title={showDialogue ? "Hide Dialogue (Alt+Ctrl+S)" : "Show Dialogue (Alt+Ctrl+S)"}
                         on:click={() => showDialogue = !showDialogue}
                         icon={showDialogue ? "speaker_notes" : "speaker_notes_off"}
                     />
-                    <FancyFile on:upload={uploadImage} icon={true} value="Change Image"/>
+                    <FancyFile bind:this={upload} on:upload={uploadImage} icon={true} value="Change Image (Alt+Ctrl+D)"/>
                     <IconButton
-                        title="Expand Page Image"
+                        title="Expand Page Image (Alt+Ctrl+F)"
                         on:click={() => showImageModal = !showImageModal}
                         icon="aspect_ratio"
                     />
                     <IconButton
-                        title="Open in a New Tab"
+                        title="Open in a New Tab (Alt+Ctrl+G)"
                         icon="launch"
                         on:click={openImage}
                     />

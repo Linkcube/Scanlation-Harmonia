@@ -14,6 +14,10 @@
 
     let files;
 
+    export function click() {
+        files.click();
+    }
+
     function inputImage(e) {
         if (directory) {
             upload(e.target.files);
