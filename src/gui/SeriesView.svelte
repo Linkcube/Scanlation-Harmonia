@@ -84,7 +84,7 @@
     }
 
     a, a:hover, a:visited {
-        color: black;
+        color: var(--primary-text-color, black);
     }
 
     .home-container {

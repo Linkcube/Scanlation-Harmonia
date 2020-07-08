@@ -11,7 +11,13 @@ import {
   copyFileSync
 } from "fs";
 import { sync as rimrafSync } from "rimraf";
-import { IDialogueBubble, IStyle, IDialogueData } from "./types";
+import {
+  IDialogueBubble,
+  IStyle,
+  IDialogueData,
+  IThemeStyle,
+  ITheme
+} from "./types";
 import * as open from "open";
 
 let exportFolder = join(resolve("."), "Series");
@@ -410,4 +416,61 @@ export const exportChapter = (data: {
 
   open(exportPath);
   return "Done";
+};
+
+export const addAppTheme = () => {
+  const themesPath = join(exportFolder, "appThemes.json");
+  let themes: ITheme[] = [];
+  if (existsSync(themesPath)) {
+    themes = JSON.parse(readFileSync(themesPath, "utf-8"));
+  }
+  themes.push({
+    title: "New Theme",
+    style: {
+      primaryColor: "#add8e6",
+      secondaryColor: "#d3d3d3",
+      backgroundColor: "#ffffff",
+      primaryTextColor: "#000000",
+      secondaryTextColor: "#808080",
+      highlightColor: "#ffc0cb",
+      focusColor: "#ffffff",
+      activeColor: "#d3d3d3",
+      deleteColor: "#ff0000",
+      cancelTextColor: "#ff0000",
+      cancelBackgroundColor: "rgb(253, 229, 232)",
+      submitTextColor: "#0000ff",
+      submitBackgroundColor: "rgb(235, 246, 250)"
+    }
+  });
+  writeFileSync(themesPath, JSON.stringify(themes));
+  return themes;
+};
+
+export const editAppTheme = (data: {
+  themeIndex: number;
+  newThemeTitle: string;
+  newThemeStyle: IThemeStyle;
+}) => {
+  const themesPath = join(exportFolder, "appThemes.json");
+  let themes: ITheme[] = [];
+  if (existsSync(themesPath)) {
+    themes = JSON.parse(readFileSync(themesPath, "utf-8"));
+  }
+  themes[data.themeIndex] = {
+    title: data.newThemeTitle,
+    style: data.newThemeStyle
+  };
+  writeFileSync(themesPath, JSON.stringify(themes));
+  return themes;
+};
+
+export const deleteAppTheme = (data: { themeIndex: number }) => {
+  const themesPath = join(exportFolder, "appThemes.json");
+  let themes: ITheme[] = [];
+  if (existsSync(themesPath)) {
+    themes = JSON.parse(readFileSync(themesPath, "utf-8"));
+  }
+  themes.splice(data.themeIndex, 1);
+  writeFileSync(themesPath, JSON.stringify(themes));
+  return themes;
 };

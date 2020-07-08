@@ -18,6 +18,9 @@ export const currentDialogue = writable(-1);
 export const dialogueBubble = writable({});
 export const seriesStyles = writable([]);
 export const seriesLanguages = writable([]);
+export const currentThemeIndex = writable(0);
+export const currentTheme = writable({});
+export const themes = writable([]);
 const uuid = writable(0);
 
 export function getUUID() {
@@ -188,7 +191,7 @@ mutation {
 const deleteLanguageMutation = (series, index) => `
 mutation {
     deleteLanguage(series: "${series}", index: ${index})
-}`
+}`;
 
 const openFolderQuery = (series, volume, chapter, page) => {
     let paramString = `series: "${series}"`;
@@ -256,6 +259,114 @@ const exportChapterMutation = (series, volume, chapter) => `
 mutation {
     exportChapter(series: "${series}", volume: "Volume ${volume}", chapter: "Chapter ${chapter}")
 }`;
+
+const getAppThemesQuery = () => `
+query {
+    getAppThemes { 
+        title,
+        style {
+            primaryColor,
+            secondaryColor,
+            backgroundColor,
+            primaryTextColor,
+            secondaryTextColor,
+            highlightColor,
+            focusColor,
+            activeColor,
+            deleteColor,
+            cancelTextColor,
+            cancelBackgroundColor,
+            submitTextColor,
+            submitBackgroundColor
+        }
+    }
+}
+`;
+
+const addAppThemeMutation = () => `
+mutation {
+    addAppTheme { 
+        title,
+        style {
+            primaryColor,
+            secondaryColor,
+            backgroundColor,
+            primaryTextColor,
+            secondaryTextColor,
+            highlightColor,
+            focusColor,
+            activeColor,
+            deleteColor,
+            cancelTextColor,
+            cancelBackgroundColor,
+            submitTextColor,
+            submitBackgroundColor
+        }
+    }
+}
+`;
+
+const editAppThemeMutation = (themeIndex, newTheme) => `
+mutation {
+    editAppTheme(
+        themeIndex: ${themeIndex}, newThemeTitle: "${newTheme.title}",
+        newThemeStyle: {
+            primaryColor: "${newTheme.style.primaryColor}",
+            secondaryColor: "${newTheme.style.secondaryColor}",
+            backgroundColor: "${newTheme.style.backgroundColor}",
+            primaryTextColor: "${newTheme.style.primaryTextColor}",
+            secondaryTextColor: "${newTheme.style.secondaryTextColor}",
+            highlightColor: "${newTheme.style.highlightColor}",
+            focusColor: "${newTheme.style.focusColor}",
+            activeColor: "${newTheme.style.activeColor}",
+            deleteColor: "${newTheme.style.deleteColor}",
+            cancelTextColor: "${newTheme.style.cancelTextColor}",
+            cancelBackgroundColor: "${newTheme.style.cancelBackgroundColor}",
+            submitTextColor: "${newTheme.style.submitTextColor}",
+            submitBackgroundColor: "${newTheme.style.submitBackgroundColor}"
+        }) { 
+        title,
+        style {
+            primaryColor,
+            secondaryColor,
+            backgroundColor,
+            primaryTextColor,
+            secondaryTextColor,
+            highlightColor,
+            focusColor,
+            activeColor,
+            deleteColor,
+            cancelTextColor,
+            cancelBackgroundColor,
+            submitTextColor,
+            submitBackgroundColor
+        }
+    }
+}
+`;
+
+const deleteAppThemeMutation = (themeIndex) => `
+mutation {
+    deleteAppTheme(themeIndex: ${themeIndex}) { 
+        title,
+        style {
+            primaryColor,
+            secondaryColor,
+            backgroundColor,
+            primaryTextColor,
+            secondaryTextColor,
+            highlightColor,
+            focusColor,
+            activeColor,
+            deleteColor,
+            cancelTextColor,
+            cancelBackgroundColor,
+            submitTextColor,
+            submitBackgroundColor
+        }
+    }
+}
+`;
 
 export function fetchSeries() {
     seriesList.set(fetchGraphQL(
@@ -515,5 +626,33 @@ export function fetchExportChapter() {
             get(currentVolume),
             get(currentChapter).id
         )
+    );
+}
+
+export function fetchGetAppThemes() {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        getAppThemesQuery()
+    );
+}
+
+export function fetchAddAppTheme() {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        addAppThemeMutation()
+    );
+}
+
+export function fetchEditAppTheme(themeIndex, theme) {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        editAppThemeMutation(themeIndex, theme)
+    );
+}
+
+export function fetchDeleteAppTheme(themeIndex) {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        deleteAppThemeMutation(themeIndex)
     );
 }

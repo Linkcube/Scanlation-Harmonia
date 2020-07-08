@@ -10,6 +10,7 @@
         MaterialInput,
         PreviewCard
     } from 'linkcube-svelte-components';
+    import AppTheming from './AppTheming.svelte';
 
     const series = [];
     let newName = "";
@@ -100,6 +101,7 @@
         <MaterialInput label="Series Name" bind:value={newName} on:enter={addSeries}></MaterialInput>
         <MaterialButton value="Add Series" on:click={addSeries}></MaterialButton>
     </div>
+    <AppTheming />
     <!-- <div class="series-form">
         <MaterialInput label="Series Folder Path" bind:value={newFolder} on:enter={setFolder}></MaterialInput>
         <MaterialButton value="Set Series Folder" on:click={setFolder}></MaterialButton>

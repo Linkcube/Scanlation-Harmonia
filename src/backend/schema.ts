@@ -11,6 +11,7 @@ type Query {
     getLanguages(series: String!): [styleObject]
     openFolder(series: String!, volume: String, chapter: String, page: String): String
     getExportFolder: String
+    getAppThemes: [themeObject]
 },
 type Mutation {
     addDialogue(series: String!, volume: String!, chapter: String!, page: String!): String
@@ -35,6 +36,9 @@ type Mutation {
     deleteLanguage(series: String!, index: Int!): String
     setExportFolder(newFolder: String!): String
     exportChapter(series: String!, volume: String!, chapter: String!): String
+    addAppTheme: [themeObject]
+    editAppTheme(themeIndex: Int!, newThemeTitle: String!, newThemeStyle: themeStyleInput!): [themeObject]
+    deleteAppTheme(themeIndex: Int!): [themeObject]
 },
 type seriesObject {
     title: String
@@ -96,5 +100,39 @@ type dialogueObject {
 type styleObject {
     title: String
     attributes: String
+},
+type themeObject {
+    title: String,
+    style: themeStyle
+},
+type themeStyle {
+    primaryColor: String,
+    secondaryColor: String,
+    backgroundColor: String,
+    primaryTextColor: String,
+    secondaryTextColor: String,
+    highlightColor: String,
+    focusColor: String,
+    activeColor: String,
+    deleteColor: String,
+    cancelTextColor: String,
+    cancelBackgroundColor: String,
+    submitTextColor: String,
+    submitBackgroundColor: String
+},
+input themeStyleInput {
+    primaryColor: String,
+    secondaryColor: String,
+    backgroundColor: String,
+    primaryTextColor: String,
+    secondaryTextColor: String,
+    highlightColor: String,
+    focusColor: String,
+    activeColor: String,
+    deleteColor: String,
+    cancelTextColor: String,
+    cancelBackgroundColor: String,
+    submitTextColor: String,
+    submitBackgroundColor: String
 }
 `);
