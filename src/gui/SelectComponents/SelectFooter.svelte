@@ -1,7 +1,7 @@
 <style>
     footer {
 		flex-shrink: 0;
-		background: var(--primary-color);
+		background: var(--primary-color, lightblue);
 		display: flex;
         flex-direction: column;
         font-size: 30px;
@@ -9,7 +9,7 @@
     }
     
     p {
-        color: var(--primary-color);
+        color: var(--background-color, white);
         margin: auto;
     }
 
@@ -25,11 +25,11 @@
     }
 </style>
 
-<footer style="--primary-color:lightblue">
+<footer>
     <div class="text-row">
         <div class="song-name">
-            <p style="--primary-color:white">
-                Scanlation Harmonia Ver. 0.0.1-pr2
+            <p>
+                Scanlation Harmonia Ver. 0.0.1-pr3
             </p>
         </div>
     </div>

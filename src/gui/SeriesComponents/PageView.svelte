@@ -248,7 +248,7 @@
         margin-left: 8px;
         margin-right: 8px;
         font-size: x-large;
-        color: black;
+        color: var(--primary-text-color, black);
     }
 
     .nav-button:disabled {

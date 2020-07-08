@@ -4,7 +4,8 @@ import {
   IPageData,
   ISeriesTreeNode,
   IDialogueData,
-  IStyle
+  IStyle,
+  ITheme
 } from "./types";
 import {
   readdirSync,
@@ -260,4 +261,64 @@ export const openFolder = (data: {
 
 export const getExportFolder = () => {
   return exportFolder;
+};
+
+export const getAppThemes = () => {
+  const themesPath = join(exportFolder, "appThemes.json");
+  let styles: ITheme[] = [];
+  if (existsSync(themesPath)) {
+    styles = JSON.parse(readFileSync(themesPath, "utf-8"));
+  } else {
+    styles = [
+      {
+        title: "Default Theme",
+        style: {
+          primaryColor: "#add8e6",
+          secondaryColor: "#d3d3d3",
+          backgroundColor: "#ffffff",
+          primaryTextColor: "#000000",
+          secondaryTextColor: "#808080",
+          highlightColor: "#ffc0cb",
+          focusColor: "#ffffff",
+          activeColor: "#d3d3d3",
+          deleteColor: "#ff0000",
+          cancelTextColor: "#ff0000",
+          cancelBackgroundColor: "rgb(253, 229, 232)",
+          submitTextColor: "#0000ff",
+          submitBackgroundColor: "rgb(235, 246, 250)"
+        }
+      },
+      {
+        title: "Moe",
+        style: {
+          primaryColor: "#789922",
+          secondaryColor: "#d3d3d3",
+          backgroundColor: "#d9e6ff",
+          primaryTextColor: "#000000",
+          secondaryTextColor: "#789922",
+          highlightColor: "#cc4a4a",
+          focusColor: "#ffffff",
+          activeColor: "#d9e6ff",
+          deleteColor: "#5c3c82",
+          cancelTextColor: "#5c3c82",
+          cancelBackgroundColor: "#7149a24f",
+          submitTextColor: "#789922",
+          submitBackgroundColor: "#97c42252"
+        }
+      }
+    ];
+    writeFileSync(themesPath, JSON.stringify(styles));
+  }
+  return styles;
+};
+
+export const getLastThemeIndex = () => {
+  const themesPath = join(exportFolder, "appThemeIndex.json");
+  let index = 0;
+  if (existsSync(themesPath)) {
+    index = JSON.parse(readFileSync(themesPath, "utf-8"));
+  } else {
+    writeFileSync(themesPath, JSON.stringify(0));
+  }
+  return index;
 };

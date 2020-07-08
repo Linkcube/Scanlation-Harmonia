@@ -180,7 +180,7 @@
 <svelte:window
     on:mousemove={trackMouse}
     on:mouseup={releaseDrag}
-    on:mousedown={() => draggedDialogue = scaleTarget = clickedDialogue = false}
+    on:mousedown={() => draggedDialogue = scaleTarget = false}
 />
 
 <style>

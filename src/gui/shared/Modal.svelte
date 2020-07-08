@@ -63,7 +63,7 @@
 			</div>
 		{:else}
 			<div class="submit">
-				<MaterialButton on:click={close} value="Close" type="submit"/>
+				<MaterialButton on:click={close} value="Close"/>
 			</div>
 		{/if}
     </div>

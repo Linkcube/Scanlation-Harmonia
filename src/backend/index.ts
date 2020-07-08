@@ -15,7 +15,9 @@ import {
   openFolder,
   updateReaderExportFolder,
   getExportFolder,
-  getLanguages
+  getLanguages,
+  getAppThemes,
+  getLastThemeIndex
 } from "./readers";
 import {
   addDialogue,
@@ -39,13 +41,31 @@ import {
   addLanguage,
   editLanguage,
   deleteLanguage,
-  exportChapter
+  exportChapter,
+  addAppTheme,
+  editAppTheme,
+  deleteAppTheme,
+  setLastThemeIndex
 } from "./writers";
 import { existsSync, mkdirSync, mkdir } from "fs";
 
 const validImageFiles = [
-  ".png", ".jpg", ".jpeg", ".jfif", ".pjpeg", "pjp", ".bmp", ".gif", ".apng", ".ico", ".cur", ".svg", ".tif", ".tiff", ".webp"
-]
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".jfif",
+  ".pjpeg",
+  "pjp",
+  ".bmp",
+  ".gif",
+  ".apng",
+  ".ico",
+  ".cur",
+  ".svg",
+  ".tif",
+  ".tiff",
+  ".webp"
+];
 let exportFolder = join(resolve("."), "Series");
 
 const setExportFolder = (data: { newFolder: string }) => {
@@ -100,7 +120,13 @@ const root = {
   addLanguage,
   editLanguage,
   deleteLanguage,
-  exportChapter
+  exportChapter,
+  getAppThemes,
+  addAppTheme,
+  editAppTheme,
+  deleteAppTheme,
+  getLastThemeIndex,
+  setLastThemeIndex
 };
 
 function print(msg: string) {

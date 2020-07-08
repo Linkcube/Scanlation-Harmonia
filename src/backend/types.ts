@@ -53,3 +53,24 @@ export interface IStyle {
   title: string;
   attributes: string;
 }
+
+export interface ITheme {
+  title: string;
+  style: IThemeStyle;
+}
+
+export interface IThemeStyle {
+  primaryColor: string;
+  secondaryColor: string;
+  backgroundColor: string;
+  primaryTextColor: string;
+  secondaryTextColor: string;
+  highlightColor: string;
+  focusColor: string;
+  activeColor: string;
+  deleteColor: string;
+  cancelTextColor: string;
+  cancelBackgroundColor: string;
+  submitTextColor: string;
+  submitBackgroundColor: string;
+}
