@@ -12,6 +12,7 @@ type Query {
     openFolder(series: String!, volume: String, chapter: String, page: String): String
     getExportFolder: String
     getAppThemes: [themeObject]
+    getLastThemeIndex: Int
 },
 type Mutation {
     addDialogue(series: String!, volume: String!, chapter: String!, page: String!): String
@@ -39,6 +40,7 @@ type Mutation {
     addAppTheme: [themeObject]
     editAppTheme(themeIndex: Int!, newThemeTitle: String!, newThemeStyle: themeStyleInput!): [themeObject]
     deleteAppTheme(themeIndex: Int!): [themeObject]
+    setLastThemeIndex(index: Int!): String
 },
 type seriesObject {
     title: String

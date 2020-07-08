@@ -16,7 +16,8 @@ import {
   updateReaderExportFolder,
   getExportFolder,
   getLanguages,
-  getAppThemes
+  getAppThemes,
+  getLastThemeIndex
 } from "./readers";
 import {
   addDialogue,
@@ -43,7 +44,8 @@ import {
   exportChapter,
   addAppTheme,
   editAppTheme,
-  deleteAppTheme
+  deleteAppTheme,
+  setLastThemeIndex
 } from "./writers";
 import { existsSync, mkdirSync, mkdir } from "fs";
 
@@ -122,7 +124,9 @@ const root = {
   getAppThemes,
   addAppTheme,
   editAppTheme,
-  deleteAppTheme
+  deleteAppTheme,
+  getLastThemeIndex,
+  setLastThemeIndex
 };
 
 function print(msg: string) {

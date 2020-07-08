@@ -10,7 +10,12 @@
         MaterialSelect
     } from 'linkcube-svelte-components';
     import Modal from '../shared/Modal.svelte';
-    import { currentThemeIndex, currentTheme, fetchGetAppThemes, fetchAddAppTheme, fetchEditAppTheme, fetchDeleteAppTheme } from '../store.js';
+    import { 
+        currentThemeIndex, currentTheme, 
+        fetchGetAppThemes, fetchAddAppTheme, 
+        fetchEditAppTheme, fetchDeleteAppTheme,
+        fetchGetLastThemeIndex, fetchSetLastThemeIndex
+    } from '../store.js';
 
     let showModal = false;
     let styleEdit = false;
@@ -99,13 +104,23 @@
     };
 
     currentThemeIndex.subscribe((newTheme) => {
-        if (themes[newTheme]) updateTheme(themes[newTheme].style);
+        if (themes[newTheme]) {
+            updateTheme(themes[newTheme].style);
+            fetchSetLastThemeIndex(newTheme);
+        }
     });
 
     fetchGetAppThemes().then((promise) => {
         Promise.resolve(promise).then(response => {
             if (response.hasOwnProperty('data')) {
                 themes = response.data.getAppThemes;
+                fetchGetLastThemeIndex().then((promise) => {
+                    Promise.resolve(promise).then(response => {
+                        if (response.hasOwnProperty('data')) {
+                            currentThemeIndex.set(response.data.getLastThemeIndex)
+                        }
+                    })
+                });
             }
         })
     });

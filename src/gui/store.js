@@ -368,6 +368,16 @@ mutation {
 }
 `;
 
+const getLastThemeIndexQuery = () => `
+query {
+    getLastThemeIndex
+}`
+
+const setLastThemeIndexMutation = (index) => `
+mutation {
+    setLastThemeIndex(index: ${index})
+}`
+
 export function fetchSeries() {
     seriesList.set(fetchGraphQL(
         graphqlUrl, {},
@@ -654,5 +664,19 @@ export function fetchDeleteAppTheme(themeIndex) {
     return fetchGraphQL(
         graphqlUrl, {},
         deleteAppThemeMutation(themeIndex)
+    );
+}
+
+export function fetchGetLastThemeIndex() {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        getLastThemeIndexQuery()
+    );
+}
+
+export function fetchSetLastThemeIndex(index) {
+    return fetchGraphQL(
+        graphqlUrl, {},
+        setLastThemeIndexMutation(index)
     );
 }

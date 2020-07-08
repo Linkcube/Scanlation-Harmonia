@@ -474,3 +474,9 @@ export const deleteAppTheme = (data: { themeIndex: number }) => {
   writeFileSync(themesPath, JSON.stringify(themes));
   return themes;
 };
+
+export const setLastThemeIndex = (data: { index: number }) => {
+  const themesPath = join(exportFolder, "appThemeIndex.json");
+  writeFileSync(themesPath, JSON.stringify(data.index));
+  return "done";
+};
