@@ -153,7 +153,9 @@ export const getSeriesTree = (data: { series: string }) => {
   const volumes: string[] = readdirSync(join(exportFolder, data.series), {
     withFileTypes: true
   })
-    .filter((file: Dirent) => file.isDirectory())
+    .filter(
+      (file: Dirent) => file.isDirectory() && file.name.includes("Volume")
+    )
     .map((dir: Dirent) => dir.name);
   volumes.forEach(volume => {
     const volumeChapters: ISeriesTreeNode[] = [];
